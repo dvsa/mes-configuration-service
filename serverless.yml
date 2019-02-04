@@ -15,6 +15,10 @@ functions:
           path: 'configuration/{scope}'
           method: get
 
+custom:
+  webpack:
+    webpackConfig: 'webpack-sls-offline.config.js'
 
 plugins:
   - serverless-offline
+  - serverless-webpack
