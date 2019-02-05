@@ -26,7 +26,7 @@ describe('integration test', () => {
       .end((err, res) => {
         if (err) throw err;
         const response = res.body;
-        expect(response.GoogleAnalyticsID).toBe('dev-ga-id');
+        expect(response.googleAnalyticsID).toBe('dev-ga-id');
         done();
       });
   });

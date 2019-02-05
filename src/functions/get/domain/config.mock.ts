@@ -1,6 +1,6 @@
 export const config = {
-  GoogleAnalyticsID: 'dev-ga-id',
-  Journal : {
+  googleAnalyticsID: 'dev-ga-id',
+  journal : {
     numberOfDaysToShow: 2,
   },
   featureToggles : {
