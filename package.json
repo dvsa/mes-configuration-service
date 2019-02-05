@@ -46,11 +46,11 @@
     "security-scan": "git secrets --scan && git log -p | scanrepo",
     "start": "npm run compile && sls offline start",
     "test": "npm run compile && jasmine",
-    "test:integration": "npm run compile && jasmine build/spec/example.spec.js"
+    "test:integration": "npm run compile && jasmine build/spec/configuration-service.spec.js"
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run security-scan && npm run lint && npm test"
+      "pre-push": "npm run security-scan && npm run lint && npm test && npm run test:integration"
     }
   },
   "bugs": {

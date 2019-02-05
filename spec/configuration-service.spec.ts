@@ -21,24 +21,12 @@ describe('integration test', () => {
 
   it('should respond 200 for an item that exists', (done) => {
     request
-      .get('/template/01234567/get')
+      .get('/configuration/dev')
       .expect(200)
       .end((err, res) => {
-        // if (err) throw err;
-        // const response: ExaminerWorkSchedule = res.body.journal;
-        // expect(response.staffNumber).toBe('01234567');
-        // @ts-ignore
-        // expect(response.testSlots.length).toBe(6);
-        done();
-      });
-  });
-
-  it('should respond 404 for an item that does not exist', (done) => {
-    request
-      .get('/template/00000000/get')
-      .expect(404)
-      .end((err, res) => {
         if (err) throw err;
+        const response = res.body;
+        expect(response.GoogleAnalyticsID).toBe('dev-ga-id');
         done();
       });
   });
