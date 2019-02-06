@@ -8,8 +8,8 @@ package:
   individually: true
 
 functions:
-  get:
-    handler: src/functions/get/framework/handler.handler
+  getConfiguration:
+    handler: src/functions/getConfiguration/framework/handler.handler
     events:
       - http:
           path: 'configuration/{scope}'
