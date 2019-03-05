@@ -5,7 +5,7 @@ export interface Config {
     autoRefreshInterval: number,
     numberOfDaysToView: number,
   };
-  logging: {
+  logs: {
     url: string;
     autoSendInterval: number,
   };
