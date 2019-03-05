@@ -1,6 +1,6 @@
 enum Scope {
-    DEV = 'dev',
-    PROD = 'prod',
-    STAGING = 'staging',
-    UAT = 'uat',
-  }
+  DEV = 'dev',
+  PROD = 'prod',
+  STAGING = 'staging',
+  UAT = 'uat',
+}

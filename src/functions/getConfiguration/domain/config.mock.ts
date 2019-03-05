@@ -7,5 +7,8 @@ export const config : Config = {
     autoRefreshInterval: 20000,
     numberOfDaysToView: 7,
   },
-  loggingUrl: 'https://dev.mes.dev-dvsacloud.uk/v1/logs',
+  logging: {
+    url: 'https://dev.mes.dev-dvsacloud.uk/v1/logs',
+    autoSendInterval: 60000,
+  },
 };
