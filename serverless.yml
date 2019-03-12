@@ -20,5 +20,6 @@ custom:
     webpackConfig: 'webpack-sls-offline.config.js'
 
 plugins:
+  - serverless-dotenv-plugin
   - serverless-offline
   - serverless-webpack
