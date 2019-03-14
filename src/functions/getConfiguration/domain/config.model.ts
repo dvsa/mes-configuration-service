@@ -5,6 +5,8 @@ export interface Config {
     journalUrl: string,
     autoRefreshInterval: number,
     numberOfDaysToView: number,
+    allowTests: boolean,
+    allowedTestCategories: string[],
   };
   logs: {
     url: string;

@@ -15,6 +15,8 @@ export const config : Config = {
     journalUrl: populateEnvironment('https://{env}.mes.dev-dvsacloud.uk/v1/journals/{staffNumber}/personal'),
     autoRefreshInterval: 20000,
     numberOfDaysToView: 7,
+    allowTests: true,
+    allowedTestCategories: ['B'],
   },
   logs: {
     url: populateEnvironment('https://{env}.mes.dev-dvsacloud.uk/v1/logs'),
