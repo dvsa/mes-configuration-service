@@ -53,6 +53,23 @@
     "test:jasmine-coverage": "nyc npm run test",
     "test:integration": "npm run compile && jasmine build/spec/configuration-service.spec.js"
   },
+  "nyc": {
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "exclude": [
+      "**/__mocks__/*",
+      "**/__tests__/*"
+    ],
+    "exclude-after-remap": false,
+    "sourceMap": true,
+    "produce-source-map": true,
+    "instrument": true
+  },
   "husky": {
     "hooks": {
       "pre-push": "npm run security-scan && npm run lint && npm test && npm run test:integration"
