@@ -25,13 +25,16 @@
     "jasmine": "^3.3.1",
     "jasmine-spec-reporter": "^4.2.1",
     "json-schema-to-typescript": "^6.1.0",
+    "nyc": "^13.3.0",
     "rimraf": "^2.6.2",
     "serverless": "^1.36.3",
     "serverless-dotenv-plugin": "^2.0.1",
     "serverless-offline": "^4.2.0",
     "serverless-webpack": "^5.2.0",
+    "source-map-support": "^0.5.11",
     "supertest": "^3.4.2",
     "ts-loader": "^5.2.2",
+    "ts-node": "^8.0.3",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",
     "typescript": "^3.1.3",
@@ -47,7 +50,25 @@
     "security-scan": "git secrets --scan && git log -p | scanrepo",
     "start": "npm run compile && sls offline start",
     "test": "npm run compile && jasmine",
+    "test:jasmine-coverage": "nyc npm run test",
     "test:integration": "npm run compile && jasmine build/spec/configuration-service.spec.js"
+  },
+  "nyc": {
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "exclude": [
+      "**/__mocks__/*",
+      "**/__tests__/*"
+    ],
+    "exclude-after-remap": false,
+    "sourceMap": true,
+    "produce-source-map": true,
+    "instrument": true
   },
   "husky": {
     "hooks": {
