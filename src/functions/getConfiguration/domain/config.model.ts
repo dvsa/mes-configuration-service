@@ -1,6 +1,7 @@
 export interface Config {
   googleAnalyticsId: string;
   approvedDeviceIdentifiers: string[];
+  timeTravelDate?: string;
   journal: {
     journalUrl: string,
     autoRefreshInterval: number,
