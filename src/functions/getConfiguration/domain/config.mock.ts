@@ -1,6 +1,7 @@
 import { Config } from './config.model';
 import { environment } from '../framework/environment';
 import { getBaseApiUrl } from '../framework/getBaseApiUrl';
+import { Scope } from './scopes.constants';
 
 const generateAnalyticsAccountSuffix = (env: string): string => {
   return env === Scope.PROD ? '4' : '3';
