@@ -4,6 +4,9 @@ import { environment } from '../framework/environment';
 const populateEnvironment = (val: string) => {
   return val.replace('{env}', environment());
 };
+const generateAllowedTestCategories = (env: string): string[] => {
+  return env === 'dev' ? ['B'] : [];
+};
 
 export const config : Config = {
   googleAnalyticsId: 'UA-129489007-3',
@@ -16,7 +19,7 @@ export const config : Config = {
     autoRefreshInterval: 20000,
     numberOfDaysToView: 7,
     allowTests: true,
-    allowedTestCategories: ['B'],
+    allowedTestCategories: generateAllowedTestCategories(environment()),
   },
   logs: {
     url: populateEnvironment('https://{env}.mes.dev-dvsacloud.uk/v1/logs'),
