@@ -1,6 +1,6 @@
 export enum Scope {
   DEV = 'dev',
-  PROD = 'prod',
+  PROD = 'live',
   STAGING = 'staging',
   UAT = 'uat',
 }
