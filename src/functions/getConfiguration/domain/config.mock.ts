@@ -2,10 +2,7 @@ import { Config } from './config.model';
 import { environment } from '../framework/environment';
 import { getBaseApiUrl } from '../framework/getBaseApiUrl';
 import { Scope } from './scopes.constants';
-
-const generateAnalyticsAccountSuffix = (env: string): string => {
-  return env === Scope.PROD ? '4' : '3';
-};
+import { getGAId } from './getGAId';
 
 const generateAllowedTestCategories = (env: string): string[] => {
   return env === Scope.DEV ? ['B'] : [];
@@ -15,7 +12,7 @@ const env = environment();
 const baseApiUrl = getBaseApiUrl();
 
 export const config : Config = {
-  googleAnalyticsId: `UA-129489007-${generateAnalyticsAccountSuffix(env)}`,
+  googleAnalyticsId: getGAId(),
   approvedDeviceIdentifiers: [
     'iPad7,4',
     'x86_64',
