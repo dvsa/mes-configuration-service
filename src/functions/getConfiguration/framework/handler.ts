@@ -2,6 +2,7 @@ import { APIGatewayProxyEvent } from 'aws-lambda';
 import createResponse from '../../../common/application/utils/createResponse';
 import Response from '../../../common/application/api/Response';
 import { config } from '../domain/config.mock';
+import { Scope } from '../domain/scopes.constants';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
 

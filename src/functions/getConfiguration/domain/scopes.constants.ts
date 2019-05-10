@@ -1,4 +1,4 @@
-enum Scope {
+export enum Scope {
   DEV = 'dev',
   PROD = 'prod',
   STAGING = 'staging',
