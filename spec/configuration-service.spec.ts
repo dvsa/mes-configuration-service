@@ -29,7 +29,7 @@ describe('integration test', () => {
         const response: Config = res.body;
         expect(response.googleAnalyticsId).toBe('UA-129489007-3');
         expect(response.journal.journalUrl).toBe(
-          'https://local.mes.dev-dvsacloud.uk/v1/journals/{staffNumber}/personal',
+          'https://dev.mes.dev-dvsacloud.uk/v1/journals/{staffNumber}/personal',
         );
         done();
       });
