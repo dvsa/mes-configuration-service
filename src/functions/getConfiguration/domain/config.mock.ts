@@ -24,6 +24,10 @@ export const config : Config = {
     allowTests: true,
     allowedTestCategories: generateAllowedTestCategories(env),
   },
+  tests: {
+    testSubmissionUrl: `${baseApiUrl}/test-result`,
+    autoSendInterval: 900000,
+  },
   logs: {
     url: `${baseApiUrl}/logs`,
     autoSendInterval: 60000,

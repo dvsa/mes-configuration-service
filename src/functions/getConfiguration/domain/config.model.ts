@@ -9,6 +9,10 @@ export interface Config {
     allowTests: boolean,
     allowedTestCategories: string[],
   };
+  tests: {
+    testSubmissionUrl: string,
+    autoSendInterval: number,
+  };
   logs: {
     url: string;
     autoSendInterval: number,
