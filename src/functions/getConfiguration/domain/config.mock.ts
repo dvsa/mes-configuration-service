@@ -23,6 +23,8 @@ export const config : Config = {
     numberOfDaysToView: 7,
     allowTests: true,
     allowedTestCategories: generateAllowedTestCategories(env),
+    enableTestReportPracticeMode: true,
+    enableEndToEndPracticeMode: true,
   },
   tests: {
     testSubmissionUrl: `${baseApiUrl}/test-result`,

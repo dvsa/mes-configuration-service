@@ -8,6 +8,8 @@ export interface Config {
     numberOfDaysToView: number,
     allowTests: boolean,
     allowedTestCategories: string[],
+    enableTestReportPracticeMode: boolean;
+    enableEndToEndPracticeMode: boolean;
   };
   tests: {
     testSubmissionUrl: string,
