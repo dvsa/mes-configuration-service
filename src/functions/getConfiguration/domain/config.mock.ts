@@ -25,7 +25,7 @@ export const config : Config = {
     allowedTestCategories: generateAllowedTestCategories(env),
     enableTestReportPracticeMode: true,
     enableEndToEndPracticeMode: true,
-    enableLogoutButton: false,
+    enableLogoutButton: true,
   },
   tests: {
     testSubmissionUrl: `${baseApiUrl}/test-result`,
