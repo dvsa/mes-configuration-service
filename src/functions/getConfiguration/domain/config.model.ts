@@ -10,6 +10,7 @@ export interface Config {
     allowedTestCategories: string[],
     enableTestReportPracticeMode: boolean;
     enableEndToEndPracticeMode: boolean;
+    enableLogoutButton: boolean;
   };
   tests: {
     testSubmissionUrl: string,
