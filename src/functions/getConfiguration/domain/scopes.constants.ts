@@ -3,4 +3,5 @@ export enum Scope {
   PROD = 'live',
   STAGING = 'staging',
   UAT = 'uat',
+  PERF = 'perf',
 }
