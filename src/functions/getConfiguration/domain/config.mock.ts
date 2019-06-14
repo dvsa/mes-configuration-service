@@ -5,13 +5,13 @@ import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
 
 const generateAllowedTestCategories = (env: string): string[] => {
-  return env === Scope.DEV ? ['B'] : [];
+  return [Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope) ? [] : ['B'];
 };
 
 const env = environment();
 const baseApiUrl = getBaseApiUrl();
 
-export const config : Config = {
+export const config: Config = {
   googleAnalyticsId: getGAId(),
   approvedDeviceIdentifiers: [
     'iPad7,4',
