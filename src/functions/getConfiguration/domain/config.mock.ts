@@ -20,7 +20,7 @@ export const config: Config = {
   journal: {
     journalUrl: `${baseApiUrl}/journals/{staffNumber}/personal`,
     autoRefreshInterval: 20000,
-    numberOfDaysToView: 7,
+    numberOfDaysToView: 14,
     allowTests: true,
     allowedTestCategories: generateAllowedTestCategories(env),
     enableTestReportPracticeMode: true,
