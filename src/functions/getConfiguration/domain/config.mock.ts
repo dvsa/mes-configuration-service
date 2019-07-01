@@ -28,7 +28,7 @@ export const config: Config = {
     enableLogoutButton: ![Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope),
   },
   tests: {
-    testSubmissionUrl: `${baseApiUrl}/test-result`,
+    testSubmissionUrl: `${baseApiUrl}/test-results`,
     autoSendInterval: 900000,
   },
   logs: {
