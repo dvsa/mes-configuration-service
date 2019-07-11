@@ -1,4 +1,4 @@
-import { Mock } from 'typemoq';
+import { Mock, It, Times } from 'typemoq';
 import * as testPermissionRepo from '../../framework/test-permission-repository';
 import { TestPermissionPeriod } from '../config.model';
 import { buildConfig } from '../config-builder';
@@ -26,11 +26,12 @@ describe('ConfigBuilder', () => {
           to: null,
         },
       ];
-      moqTestPermissionRepo.setup(x => x()).returns(() => Promise.resolve(fakePermissions));
+      moqTestPermissionRepo.setup(x => x(It.isAny())).returns(() => Promise.resolve(fakePermissions));
 
-      const result = await buildConfig();
+      const result = await buildConfig('999');
 
       expect(result.journal.testPermissionPeriods).toBe(fakePermissions);
+      moqTestPermissionRepo.verify(x => x(It.isValue('999')), Times.once());
     });
   });
 });
