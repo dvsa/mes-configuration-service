@@ -8,6 +8,7 @@ export interface Config {
     numberOfDaysToView: number,
     allowTests: boolean,
     allowedTestCategories: string[],
+    testPermissionPeriods: TestPermissionPeriod[];
     enableTestReportPracticeMode: boolean;
     enableEndToEndPracticeMode: boolean;
     enableLogoutButton: boolean;
@@ -20,4 +21,10 @@ export interface Config {
     url: string;
     autoSendInterval: number,
   };
+}
+
+export interface TestPermissionPeriod {
+  category: string;
+  from: string;
+  to: string | null;
 }

@@ -23,6 +23,7 @@ export const config: Config = {
     numberOfDaysToView: 14,
     allowTests: true,
     allowedTestCategories: generateAllowedTestCategories(env),
+    testPermissionPeriods: [],
     enableTestReportPracticeMode: true,
     enableEndToEndPracticeMode: true,
     enableLogoutButton: ![Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope),
