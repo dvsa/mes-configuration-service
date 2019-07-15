@@ -1,7 +1,10 @@
+import { ExaminerRole } from '../constants/ExaminerRole';
+
 export interface Config {
   googleAnalyticsId: string;
   approvedDeviceIdentifiers: string[];
   timeTravelDate?: string;
+  role: ExaminerRole;
   journal: {
     journalUrl: string,
     autoRefreshInterval: number,

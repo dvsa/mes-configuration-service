@@ -3,6 +3,7 @@ import { environment } from '../framework/environment';
 import { getBaseApiUrl } from '../framework/getBaseApiUrl';
 import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
+import { ExaminerRole } from '../constants/ExaminerRole';
 
 const generateAllowedTestCategories = (env: string): string[] => {
   return [Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope) ? [] : ['B'];
@@ -17,6 +18,7 @@ export const config: Config = {
     'iPad7,4',
     'x86_64',
   ],
+  role: ExaminerRole.DE,
   journal: {
     journalUrl: `${baseApiUrl}/journals/{staffNumber}/personal`,
     autoRefreshInterval: 20000,
