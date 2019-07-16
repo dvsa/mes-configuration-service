@@ -2,11 +2,13 @@ import { Config } from './config.model';
 import { config } from './config.mock';
 import { getTestPermissionPeriods } from '../framework/test-permission-repository';
 import { warn } from '@dvsa/mes-microservice-common/application/utils/logger';
+import { ExaminerRole } from '../constants/ExaminerRole';
 
-export const buildConfig = async (staffNumber: string): Promise<Config> => {
+export const buildConfig = async (staffNumber: string, examinerRole: ExaminerRole): Promise<Config> => {
   let builtConfig: Config = config;
 
   builtConfig = await addTestPermissionPeriods(builtConfig, staffNumber);
+  builtConfig.role = examinerRole;
 
   return builtConfig;
 };
