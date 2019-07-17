@@ -9,19 +9,24 @@ const generateAllowedTestCategories = (env: string): string[] => {
   return [Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope) ? [] : ['B'];
 };
 
+const generateApprovedDeviceIdentifiers = (env: string): string[] => {
+  return env === Scope.DEV ? ['iPad7,4', 'x86_64'] : ['iPad7,4'];
+};
+
+const generateautoRefreshInterval = (env: string): number => {
+  return env === Scope.DEV ? (20 * 1000) : (300 * 1000);
+};
+
 const env = environment();
 const baseApiUrl = getBaseApiUrl();
 
 export const config: Config = {
   googleAnalyticsId: getGAId(),
-  approvedDeviceIdentifiers: [
-    'iPad7,4',
-    'x86_64',
-  ],
   role: ExaminerRole.DE,
+  approvedDeviceIdentifiers: generateApprovedDeviceIdentifiers(env),
   journal: {
     journalUrl: `${baseApiUrl}/journals/{staffNumber}/personal`,
-    autoRefreshInterval: 20000,
+    autoRefreshInterval: generateautoRefreshInterval(env),
     numberOfDaysToView: 14,
     allowTests: true,
     allowedTestCategories: generateAllowedTestCategories(env),
