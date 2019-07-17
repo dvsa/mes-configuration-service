@@ -10,11 +10,11 @@ const generateAllowedTestCategories = (env: string): string[] => {
 };
 
 const generateApprovedDeviceIdentifiers = (env: string): string[] => {
-  return env === Scope.DEV ? ['iPad7,4', 'x86_64'] : ['iPad7,4'];
+  return [Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope) ? ['iPad7,4'] : ['iPad7,4', 'x86_64'];
 };
 
 const generateautoRefreshInterval = (env: string): number => {
-  return env === Scope.DEV ? (20 * 1000) : (300 * 1000);
+  return [Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope) ? (300 * 1000) : (20 * 1000);
 };
 
 const env = environment();
