@@ -5,16 +5,18 @@ import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
 import { ExaminerRole } from '../constants/ExaminerRole';
 
+const productionLikeEnvs = [Scope.PERF, Scope.PROD, Scope.UAT];
+
 const generateAllowedTestCategories = (env: string): string[] => {
-  return [Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope) ? [] : ['B'];
+  return productionLikeEnvs.includes(env as Scope) ? [] : ['B'];
 };
 
 const generateApprovedDeviceIdentifiers = (env: string): string[] => {
-  return [Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope) ? ['iPad7,4'] : ['iPad7,4', 'x86_64'];
+  return productionLikeEnvs.includes(env as Scope) ? ['iPad7,4'] : ['iPad7,4', 'x86_64'];
 };
 
 const generateautoRefreshInterval = (env: string): number => {
-  return [Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope) ? (300 * 1000) : (20 * 1000);
+  return productionLikeEnvs.includes(env as Scope) ? (300 * 1000) : (20 * 1000);
 };
 
 const env = environment();
@@ -33,7 +35,7 @@ export const config: Config = {
     testPermissionPeriods: [],
     enableTestReportPracticeMode: true,
     enableEndToEndPracticeMode: true,
-    enableLogoutButton: ![Scope.PERF, Scope.PROD, Scope.UAT].includes(env as Scope),
+    enableLogoutButton: !productionLikeEnvs.includes(env as Scope),
   },
   tests: {
     testSubmissionUrl: `${baseApiUrl}/test-results`,
