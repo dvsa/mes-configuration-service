@@ -1,7 +1,7 @@
 import { handler } from '../handler';
 import * as createResponse from '../../../../common/application/utils/createResponse';
 import { APIGatewayEvent } from 'aws-lambda';
-import { config } from '../../domain/config.mock';
+import { config } from '../../domain/config';
 import { Mock, Times, It } from 'typemoq';
 import * as configBuilder from '../../domain/config-builder';
 import { ExaminerRole } from '../../constants/ExaminerRole';

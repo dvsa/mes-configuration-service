@@ -1,5 +1,5 @@
 import { Config } from './config.model';
-import { config } from './config.mock';
+import { config } from './config';
 import { getTestPermissionPeriods } from '../framework/test-permission-repository';
 import { warn } from '@dvsa/mes-microservice-common/application/utils/logger';
 import { ExaminerRole } from '../constants/ExaminerRole';
