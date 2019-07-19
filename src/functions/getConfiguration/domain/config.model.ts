@@ -24,7 +24,7 @@ export interface Config {
     url: string;
     autoSendInterval: number,
   };
-  requestTimeout: number
+  requestTimeout: number,
 }
 
 export interface TestPermissionPeriod {
