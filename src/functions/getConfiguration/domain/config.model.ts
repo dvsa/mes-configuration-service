@@ -7,7 +7,7 @@ export interface Config {
   role: ExaminerRole;
   journal: {
     journalUrl: string,
-    rekeySearchUrl: string,
+    searchBookingUrl: string,
     autoRefreshInterval: number,
     numberOfDaysToView: number,
     allowTests: boolean,
