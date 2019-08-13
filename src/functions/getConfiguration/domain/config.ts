@@ -28,6 +28,7 @@ export const config: Config = {
   approvedDeviceIdentifiers: generateApprovedDeviceIdentifiers(env),
   journal: {
     journalUrl: `${baseApiUrl}/journals/{staffNumber}/personal`,
+    searchBookingUrl: `${baseApiUrl}/journals/{staffNumber}/search`,
     autoRefreshInterval: generateautoRefreshInterval(env),
     numberOfDaysToView: 14,
     allowTests: true,
