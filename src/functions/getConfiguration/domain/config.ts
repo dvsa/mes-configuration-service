@@ -46,5 +46,5 @@ export const config: Config = {
     url: `${baseApiUrl}/logs`,
     autoSendInterval: 60000,
   },
-  requestTimeout: 20000,
+  requestTimeout: 40000,
 };
