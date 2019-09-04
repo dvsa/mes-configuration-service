@@ -25,6 +25,9 @@ export interface Config {
     url: string;
     autoSendInterval: number,
   };
+  user: {
+    findUser: string;
+  };
   requestTimeout: number;
 }
 

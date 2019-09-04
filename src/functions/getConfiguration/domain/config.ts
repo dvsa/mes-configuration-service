@@ -46,5 +46,8 @@ export const config: Config = {
     url: `${baseApiUrl}/logs`,
     autoSendInterval: 60000,
   },
+  user: {
+    findUser: `${baseApiUrl}/users/{staffNumber}`,
+  },
   requestTimeout: 40000,
 };
