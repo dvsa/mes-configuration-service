@@ -1,4 +1,4 @@
-import { TestPermissionPeriod } from '../domain/config.model';
+import { TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
 import { DynamoDB } from 'aws-sdk';
 import { warn } from '@dvsa/mes-microservice-common/application/utils/logger';
 

@@ -1,4 +1,4 @@
-import { Config } from './config.model';
+import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { environment } from '../framework/environment';
 import { getBaseApiUrl } from '../framework/getBaseApiUrl';
 import { Scope } from './scopes.constants';
@@ -22,7 +22,7 @@ const generateautoRefreshInterval = (env: string): number => {
 const env = environment();
 const baseApiUrl = getBaseApiUrl();
 
-export const config: Config = {
+export const config: RemoteConfig = {
   googleAnalyticsId: getGAId(),
   role: ExaminerRole.DE,
   approvedDeviceIdentifiers: generateApprovedDeviceIdentifiers(env),
@@ -37,17 +37,14 @@ export const config: Config = {
     enableTestReportPracticeMode: true,
     enableEndToEndPracticeMode: true,
     enableLogoutButton: !productionLikeEnvs.includes(env as Scope),
+    daysToCacheJournalData: 14,
   },
   tests: {
     testSubmissionUrl: `${baseApiUrl}/test-results`,
     autoSendInterval: 900000,
   },
-  logs: {
-    url: `${baseApiUrl}/logs`,
-    autoSendInterval: 60000,
-  },
   user: {
-    findUser: `${baseApiUrl}/users/{staffNumber}`,
+    findUserUrl: `${baseApiUrl}/users/{staffNumber}`,
   },
   requestTimeout: 40000,
 };

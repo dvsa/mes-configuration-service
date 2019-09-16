@@ -1,6 +1,6 @@
 import { Mock, It, Times } from 'typemoq';
 import * as testPermissionRepo from '../../framework/test-permission-repository';
-import { TestPermissionPeriod } from '../config.model';
+import { TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../config-builder';
 import { ExaminerRole } from '../../constants/ExaminerRole';
 
@@ -24,7 +24,6 @@ describe('ConfigBuilder', () => {
         {
           category: 'B',
           from: '2019-12-01',
-          to: null,
         },
       ];
       moqTestPermissionRepo.setup(x => x(It.isAny())).returns(() => Promise.resolve(fakePermissions));
