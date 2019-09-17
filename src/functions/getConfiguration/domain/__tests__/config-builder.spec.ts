@@ -24,6 +24,7 @@ describe('ConfigBuilder', () => {
         {
           category: 'B',
           from: '2019-12-01',
+          to: null,
         },
       ];
       moqTestPermissionRepo.setup(x => x(It.isAny())).returns(() => Promise.resolve(fakePermissions));
