@@ -17,12 +17,12 @@ describe('ConfigBuilder', () => {
     it('should put the examiners TestPermissionPeriods into the config model', async () => {
       const fakePermissions: TestPermissionPeriod[] = [
         {
-          category: 'B',
+          testCategory: 'B',
           from: '2019-08-01',
           to: '2019-08-20',
         },
         {
-          category: 'B',
+          testCategory: 'B',
           from: '2019-12-01',
           to: null,
         },
