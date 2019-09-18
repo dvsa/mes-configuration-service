@@ -3,7 +3,7 @@ import { bootstrapLogging, customMetric, error, info } from '@dvsa/mes-microserv
 import createResponse from '../../../common/application/utils/createResponse';
 import Response from '../../../common/application/api/Response';
 import { Scope } from '../domain/scopes.constants';
-import { Config } from '../domain/config.model';
+import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
 
@@ -33,7 +33,7 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   info('Returning configuration for ', scope);
   customMetric('ConfigurationReturned', 'Number of times the configuration has been returned to a user');
 
-  const config: Config = await buildConfig(staffNumber, examinerRole);
+  const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
   return createResponse(config);
 }
 

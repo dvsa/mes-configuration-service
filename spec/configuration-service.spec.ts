@@ -1,6 +1,6 @@
 import * as supertest from 'supertest';
 import { startSlsOffline, stopSlsOffline } from './helpers/integration-test-lifecycle';
-import { Config } from '../src/functions/getConfiguration/domain/config.model';
+import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
 
@@ -26,7 +26,7 @@ describe('integration test', () => {
       .expect(200)
       .end((err, res) => {
         if (err) throw err;
-        const response: Config = res.body;
+        const response: RemoteConfig = res.body;
         expect(response.googleAnalyticsId).toBe('UA-129489007-3');
         expect(response.journal.journalUrl).toBe(
           'https://dev.mes.dev-dvsacloud.uk/v1/journals/{staffNumber}/personal',
