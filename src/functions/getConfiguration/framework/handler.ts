@@ -34,6 +34,11 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
     return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
   }
 
+  if (!event.queryStringParameters || !event.queryStringParameters.app_version) {
+    error('No app version provided');
+    return createResponse('No app version provided', 400);
+  }
+
   const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
   if (!staffNumber) {
     error(errorMessages.NO_STAFF_NUMBER);

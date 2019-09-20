@@ -137,5 +137,16 @@ describe('handler', () => {
       expect(resp.statusCode).toBe(401);
       expect(createResponse.default).toHaveBeenCalledWith(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
     });
+
+    it('should return 401 when there is no staff number in the authoriser', async () => {
+      dummyApigwEvent.requestContext.authorizer ?
+      delete dummyApigwEvent.requestContext.authorizer.staffNumber :
+      fail('authoriser is null');
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(401);
+      expect(createResponse.default).toHaveBeenCalledWith('No staff number found in request context', 401);
+    });
   });
 });
