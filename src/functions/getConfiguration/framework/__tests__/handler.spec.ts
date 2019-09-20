@@ -8,10 +8,9 @@ import { ExaminerRole } from '../../constants/ExaminerRole';
 
 const lambdaTestUtils = require('aws-lambda-test-utils');
 
-describe('get handler', () => {
+describe('handler', () => {
 
   let dummyApigwEvent: APIGatewayEvent;
-  let createResponseSpy: jasmine.Spy;
   const moqConfigBuilder = Mock.ofInstance(configBuilder.buildConfig);
 
   beforeEach(() => {
@@ -19,12 +18,15 @@ describe('get handler', () => {
 
     moqConfigBuilder.setup(x => x(It.isAny(), It.isAny())).returns(() => Promise.resolve(config));
 
-    createResponseSpy = spyOn(createResponse, 'default');
+    spyOn(createResponse, 'default').and.callThrough();
     spyOn(configBuilder, 'buildConfig').and.callFake(moqConfigBuilder.object);
     dummyApigwEvent = {
       ...lambdaTestUtils.mockEventCreator.createAPIGatewayEvent({
         pathParameters: {
           scope: 'dev',
+        },
+        queryStringParameters: {
+          app_version : '2.0',
         },
       }),
       requestContext: {
@@ -36,9 +38,9 @@ describe('get handler', () => {
     };
   });
 
-  describe('given the handler returns config', () => {
-    it('should return a successful response with the config', async () => {
-      createResponseSpy.and.returnValue({ statusCode: 200 });
+  describe('handler', () => {
+
+    it('should return 200 when the request was successful', async () => {
       const resp: any = await handler(dummyApigwEvent);
 
       expect(resp.statusCode).toBe(200);
@@ -46,12 +48,60 @@ describe('get handler', () => {
         .toHaveBeenCalledWith(config);
       moqConfigBuilder.verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE)), Times.once());
     });
-  });
 
-  describe('error handling', () => {
-    it('should respond 401 when there is no staff number in the request context', async () => {
-      createResponseSpy.and.returnValue({ statusCode: 401 });
+    it('should return 400 when there are no path parameters', async() => {
+      delete dummyApigwEvent.pathParameters;
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(400);
+      expect(createResponse.default).toHaveBeenCalledWith('No Scope Provided', 400);
+    });
+
+    it('should return 400 when there is no scope path parameter', async() => {
+      dummyApigwEvent.pathParameters ?
+      delete dummyApigwEvent.pathParameters.scope :
+      fail('dummyApigwEvent.pathParameters is null');
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(400);
+      expect(createResponse.default).toHaveBeenCalledWith('No Scope Provided', 400);
+    });
+
+    it('should return 400 when there are no query string values', async() => {
+      delete dummyApigwEvent.queryStringParameters;
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(400);
+      expect(createResponse.default).toHaveBeenCalledWith('No app version provided', 400);
+    });
+
+    it('should return 400 response when app_version is missing from the query string', async() => {
+      dummyApigwEvent.queryStringParameters ?
+    delete dummyApigwEvent.queryStringParameters.app_version :
+    fail('dummyApigwEvent.queryStringParameters is null');
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(400);
+      expect(createResponse.default).toHaveBeenCalledWith('No app version provided', 400);
+    });
+
+    it('should return 401 when there is no authoriser object', async () => {
       delete dummyApigwEvent.requestContext.authorizer;
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(401);
+      expect(createResponse.default).toHaveBeenCalledWith('No staff number found in request context', 401);
+    });
+
+    it('should return 401 when there is no staff number in the authoriser', async () => {
+      dummyApigwEvent.requestContext.authorizer ?
+      delete dummyApigwEvent.requestContext.authorizer.staffNumber :
+      fail('authoriser is null');
 
       const resp = await handler(dummyApigwEvent);
 

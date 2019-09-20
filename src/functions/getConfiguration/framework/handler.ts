@@ -10,9 +10,14 @@ import { ExaminerRole } from '../constants/ExaminerRole';
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
 
-  if (!event.pathParameters) {
+  if (!event.pathParameters || !event.pathParameters.scope) {
     error('No scope provided');
     return createResponse('No Scope Provided', 400);
+  }
+
+  if (!event.queryStringParameters || !event.queryStringParameters.app_version) {
+    error('No app version provided');
+    return createResponse('No app version provided', 400);
   }
 
   const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
@@ -23,11 +28,6 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   }
 
   const examinerRole = getExaminerRoleFromRequestContext(event.requestContext);
-  if (!examinerRole) {
-    const msg = 'No examiner role found in request context';
-    error(msg);
-    return createResponse(msg, 401);
-  }
 
   const scope: Scope = event.pathParameters.scope as Scope;
   info('Returning configuration for ', scope);
@@ -44,9 +44,12 @@ const getStaffNumberFromRequestContext = (requestContext: APIGatewayEventRequest
   return null;
 };
 
-const getExaminerRoleFromRequestContext = (requestContext: APIGatewayEventRequestContext): ExaminerRole | null => {
+const getExaminerRoleFromRequestContext = (requestContext: APIGatewayEventRequestContext): ExaminerRole => {
   if (requestContext.authorizer) {
     return requestContext.authorizer.examinerRole === 'LDTM' ? ExaminerRole.LDTM : ExaminerRole.DE;
   }
-  return null;
+  // If role is missing we default to DE
+  // We only use this for search settings not for authentication so there is no risk giving the user
+  // the lowest role type.
+  return ExaminerRole.DE;
 };
