@@ -6,25 +6,32 @@ import { Scope } from '../domain/scopes.constants';
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
+import { getMinimumAppVersion } from './environment';
+import * as errorMessages from './errors.constants';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
 
+  const minimumAppVersion = getMinimumAppVersion();
+  if (minimumAppVersion === undefined || minimumAppVersion.trim().length === 0) {
+    error(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE);
+    return createResponse(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
+  }
+
   if (!event.pathParameters || !event.pathParameters.scope) {
-    error('No scope provided');
-    return createResponse('No Scope Provided', 400);
+    error(errorMessages.NO_SCOPE);
+    return createResponse(errorMessages.NO_SCOPE, 400);
   }
 
   if (!event.queryStringParameters || !event.queryStringParameters.app_version) {
-    error('No app version provided');
-    return createResponse('No app version provided', 400);
+    error(errorMessages.NO_APP_VERSION);
+    return createResponse(errorMessages.NO_APP_VERSION, 400);
   }
 
   const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
   if (!staffNumber) {
-    const msg = 'No staff number found in request context';
-    error(msg);
-    return createResponse(msg, 401);
+    error(errorMessages.NO_STAFF_NUMBER);
+    return createResponse(errorMessages.NO_STAFF_NUMBER, 401);
   }
 
   const examinerRole = getExaminerRoleFromRequestContext(event.requestContext);
