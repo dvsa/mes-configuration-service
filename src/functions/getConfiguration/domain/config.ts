@@ -26,6 +26,7 @@ export const config: RemoteConfig = {
   googleAnalyticsId: getGAId(),
   role: ExaminerRole.DE,
   approvedDeviceIdentifiers: generateApprovedDeviceIdentifiers(env),
+  employeeNameKey: 'name',
   journal: {
     journalUrl: `${baseApiUrl}/journals/{staffNumber}/personal`,
     searchBookingUrl: `${baseApiUrl}/journals/{staffNumber}/search`,
