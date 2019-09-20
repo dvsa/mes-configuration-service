@@ -146,7 +146,25 @@ describe('handler', () => {
       const resp = await handler(dummyApigwEvent);
 
       expect(resp.statusCode).toBe(401);
-      expect(createResponse.default).toHaveBeenCalledWith('No staff number found in request context', 401);
+      expect(createResponse.default).toHaveBeenCalledWith(errorMessages.NO_STAFF_NUMBER, 401);
+    });
+
+    it('should return 500 when MINIMUM_APP_VERSION is undefined', async () => {
+      delete process.env.MINIMUM_APP_VERSION;
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(500);
+      expect(createResponse.default).toHaveBeenCalledWith(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
+    });
+
+    it('should return 500 when MINIMUM_APP_VERSION is an empty string', async () => {
+      process.env.MINIMUM_APP_VERSION = '';
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(500);
+      expect(createResponse.default).toHaveBeenCalledWith(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
     });
   });
 });
