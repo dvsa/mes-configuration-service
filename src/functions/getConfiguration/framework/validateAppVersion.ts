@@ -1,5 +1,3 @@
-import { error } from 'util';
-
 export const isAllowedAppVersion = (requestAppVersion: string , minimumAppVersion: string): boolean => {
   if (!isVersionCorrectFormat(requestAppVersion) || !isVersionCorrectFormat(minimumAppVersion)) {
     return false;
