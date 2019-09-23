@@ -129,5 +129,13 @@ describe('handler', () => {
       expect(resp.statusCode).toBe(500);
       expect(createResponse.default).toHaveBeenCalledWith(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
     });
+    it('should return 401 when the app version is below the minimum app version', async () => {
+      process.env.MINIMUM_APP_VERSION = '2.1';
+
+      const resp = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(401);
+      expect(createResponse.default).toHaveBeenCalledWith(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
+    });
   });
 });

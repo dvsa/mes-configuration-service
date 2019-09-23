@@ -8,6 +8,7 @@ import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
 import { getMinimumAppVersion } from './environment';
 import * as errorMessages from './errors.constants';
+import { isAllowedAppVersion } from './validateAppVersion';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
@@ -26,6 +27,11 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   if (!event.queryStringParameters || !event.queryStringParameters.app_version) {
     error(errorMessages.NO_APP_VERSION);
     return createResponse(errorMessages.NO_APP_VERSION, 400);
+  }
+
+  if (!isAllowedAppVersion(event.queryStringParameters.app_version, minimumAppVersion)) {
+    error(errorMessages.APP_VERSION_BELOW_MINIMUM);
+    return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
   }
 
   const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
