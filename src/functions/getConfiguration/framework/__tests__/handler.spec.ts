@@ -137,34 +137,5 @@ describe('handler', () => {
       expect(resp.statusCode).toBe(401);
       expect(createResponse.default).toHaveBeenCalledWith(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
     });
-
-    it('should return 401 when there is no staff number in the authoriser', async () => {
-      dummyApigwEvent.requestContext.authorizer ?
-      delete dummyApigwEvent.requestContext.authorizer.staffNumber :
-      fail('authoriser is null');
-
-      const resp = await handler(dummyApigwEvent);
-
-      expect(resp.statusCode).toBe(401);
-      expect(createResponse.default).toHaveBeenCalledWith(errorMessages.NO_STAFF_NUMBER, 401);
-    });
-
-    it('should return 500 when MINIMUM_APP_VERSION is undefined', async () => {
-      delete process.env.MINIMUM_APP_VERSION;
-
-      const resp = await handler(dummyApigwEvent);
-
-      expect(resp.statusCode).toBe(500);
-      expect(createResponse.default).toHaveBeenCalledWith(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
-    });
-
-    it('should return 500 when MINIMUM_APP_VERSION is an empty string', async () => {
-      process.env.MINIMUM_APP_VERSION = '';
-
-      const resp = await handler(dummyApigwEvent);
-
-      expect(resp.statusCode).toBe(500);
-      expect(createResponse.default).toHaveBeenCalledWith(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
-    });
   });
 });
