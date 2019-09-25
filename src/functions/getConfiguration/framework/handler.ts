@@ -6,28 +6,41 @@ import { Scope } from '../domain/scopes.constants';
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
+import { getMinimumAppVersion } from './environment';
+import * as errorMessages from './errors.constants';
+import { isAllowedAppVersion } from './validateAppVersion';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
 
-  if (!event.pathParameters) {
-    error('No scope provided');
-    return createResponse('No Scope Provided', 400);
+  const minimumAppVersion = getMinimumAppVersion();
+  if (minimumAppVersion === undefined || minimumAppVersion.trim().length === 0) {
+    error(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE);
+    return createResponse(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
+  }
+
+  if (!event.pathParameters || !event.pathParameters.scope) {
+    error(errorMessages.NO_SCOPE);
+    return createResponse(errorMessages.NO_SCOPE, 400);
+  }
+
+  if (!event.queryStringParameters || !event.queryStringParameters.app_version) {
+    error(errorMessages.NO_APP_VERSION);
+    return createResponse(errorMessages.NO_APP_VERSION, 400);
+  }
+
+  if (!isAllowedAppVersion(event.queryStringParameters.app_version, minimumAppVersion)) {
+    error(errorMessages.APP_VERSION_BELOW_MINIMUM);
+    return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
   }
 
   const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
   if (!staffNumber) {
-    const msg = 'No staff number found in request context';
-    error(msg);
-    return createResponse(msg, 401);
+    error(errorMessages.NO_STAFF_NUMBER);
+    return createResponse(errorMessages.NO_STAFF_NUMBER, 401);
   }
 
   const examinerRole = getExaminerRoleFromRequestContext(event.requestContext);
-  if (!examinerRole) {
-    const msg = 'No examiner role found in request context';
-    error(msg);
-    return createResponse(msg, 401);
-  }
 
   const scope: Scope = event.pathParameters.scope as Scope;
   info('Returning configuration for ', scope);
@@ -44,9 +57,12 @@ const getStaffNumberFromRequestContext = (requestContext: APIGatewayEventRequest
   return null;
 };
 
-const getExaminerRoleFromRequestContext = (requestContext: APIGatewayEventRequestContext): ExaminerRole | null => {
+const getExaminerRoleFromRequestContext = (requestContext: APIGatewayEventRequestContext): ExaminerRole => {
   if (requestContext.authorizer) {
     return requestContext.authorizer.examinerRole === 'LDTM' ? ExaminerRole.LDTM : ExaminerRole.DE;
   }
-  return null;
+  // If role is missing we default to DE
+  // We only use this for search settings not for authentication so there is no risk giving the user
+  // the lowest role type.
+  return ExaminerRole.DE;
 };
