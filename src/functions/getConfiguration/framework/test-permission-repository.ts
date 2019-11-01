@@ -11,7 +11,8 @@ export const getTestPermissionPeriods = async (staffNumber: string): Promise<Tes
       staffNumber,
     },
   };
-  const getResponse = await ddb.get(getParams).promise();
+  const getResponse = await forceTimeOutOnPromise(2000, ddb.get(getParams).promise());
+
   const responseItem = getResponse.Item;
   if (!responseItem || !responseItem.testPermissionPeriods) {
     return [];
@@ -20,10 +21,30 @@ export const getTestPermissionPeriods = async (staffNumber: string): Promise<Tes
 };
 
 const getUsersTableName = (): string => {
-  const envvarValue = process.env.USERS_DDB_TABLE_NAME;
+  const envvarValue = process.env.USERS_DDB_TABLE_NAME || 'mes-mattb-api-users';
   if (!envvarValue) {
     warn('No envvar found for users DDB table (USERS_DDB_TABLE_NAME), using default');
     return 'users';
   }
   return envvarValue;
+};
+
+/**
+ * Function to force a timeout on the specified callback regardless of if the cb has resolved or not
+ * @param {number} millis
+ * @param callback
+ * @return {Promise<any>}
+ */
+const forceTimeOutOnPromise = (milliseconds: number, callback: any): Promise<any> => {
+  const timeout = new Promise((resolve, reject) =>
+        setTimeout(() =>
+                     reject(
+                       `Timed out after ${milliseconds} ms.`,
+                     ),
+                   milliseconds));
+
+  return Promise.race([
+    callback,
+    timeout,
+  ]);
 };

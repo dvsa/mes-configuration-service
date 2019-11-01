@@ -13,6 +13,13 @@ import { isAllowedAppVersion } from './validateAppVersion';
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
 
+  const context = {
+    authorizer: {
+      staffNumber: '1234567',
+      examinerRole: ExaminerRole.LDTM,
+    },
+  };
+
   const minimumAppVersion = getMinimumAppVersion();
   if (minimumAppVersion === undefined || minimumAppVersion.trim().length === 0) {
     error(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE);
@@ -34,13 +41,16 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
     return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
   }
 
-  const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
+  // const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
+  const staffNumber = context.authorizer.staffNumber;
+
   if (!staffNumber) {
     error(errorMessages.NO_STAFF_NUMBER);
     return createResponse(errorMessages.NO_STAFF_NUMBER, 401);
   }
 
-  const examinerRole = getExaminerRoleFromRequestContext(event.requestContext);
+  // const examinerRole = getExaminerRoleFromRequestContext(event.requestContext);
+  const examinerRole = context.authorizer.examinerRole;
 
   const scope: Scope = event.pathParameters.scope as Scope;
   info('Returning configuration for ', scope);
