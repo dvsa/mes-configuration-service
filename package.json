@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@dvsa/mes-microservice-common": "0.4.0",
+    "@dvsa/mes-test-schema": "3.21.0",
     "aws-sdk": "^2.389.0",
     "compare-versions": "^3.5.1",
     "moment": "^2.23.0"
