@@ -4,6 +4,7 @@ import { getBaseApiUrl } from '../framework/getBaseApiUrl';
 import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
 import { ExaminerRole } from '../constants/ExaminerRole';
+import { getRaiseIncidentApiBaseUrl } from '../framework/getRaiseIncidentApiBaseUrl';
 
 const productionLikeEnvs = [Scope.PERF, Scope.PROD, Scope.UAT];
 
@@ -28,6 +29,7 @@ export const config: RemoteConfig = {
   role: ExaminerRole.DE,
   approvedDeviceIdentifiers: generateApprovedDeviceIdentifiers(env),
   employeeNameKey: 'name',
+  raiseIncidentApiBaseUrl: getRaiseIncidentApiBaseUrl(),
   journal: {
     journalUrl: `${baseApiUrl}/journals/{staffNumber}/personal`,
     searchBookingUrl: `${baseApiUrl}/journals/{staffNumber}/search`,
