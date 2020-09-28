@@ -39,7 +39,7 @@ export const config: RemoteConfig = {
     testPermissionPeriods: [],
     enableTestReportPracticeMode: true,
     enableEndToEndPracticeMode: true,
-    enableLogoutButton: !productionLikeEnvs.includes(env as Scope),
+    enableLogoutButton: true,
     daysToCacheJournalData: 14,
   },
   tests: {
