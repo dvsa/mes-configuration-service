@@ -10,3 +10,8 @@ export const isAllowedAppVersion = (requestAppVersion: string , minimumAppVersio
 
 const isVersionCorrectFormat = (appVersion: string): boolean =>
     new RegExp('^[0-9]+\.[0-9]+$').test(appVersion);
+
+export const isAppVersionEligibleForTeamJournal = (requestAppVersion: string): boolean => {
+  const majorVersion: number = parseInt(requestAppVersion.substr(0, 1), 10);
+  return majorVersion >= 4;
+};

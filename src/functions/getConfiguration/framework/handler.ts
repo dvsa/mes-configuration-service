@@ -8,7 +8,7 @@ import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
 import { getMinimumAppVersion } from './environment';
 import * as errorMessages from './errors.constants';
-import { isAllowedAppVersion } from './validateAppVersion';
+import { isAllowedAppVersion, isAppVersionEligibleForTeamJournal } from './validateAppVersion';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
@@ -47,6 +47,10 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   customMetric('ConfigurationReturned', 'Number of times the configuration has been returned to a user');
 
   const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
+  // delete team journals url if not coming from app version 4 or above
+  if (!isAppVersionEligibleForTeamJournal(event.queryStringParameters.app_version)) {
+    delete config.journal.teamJournalUrl;
+  }
   return createResponse(config);
 }
 
