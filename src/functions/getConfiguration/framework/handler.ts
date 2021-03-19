@@ -9,6 +9,7 @@ import { ExaminerRole } from '../constants/ExaminerRole';
 import { getMinimumAppVersion } from './environment';
 import * as errorMessages from './errors.constants';
 import { isAllowedAppVersion, isAppVersionEligibleForTeamJournal } from './validateAppVersion';
+import { cloneDeep } from 'lodash';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
@@ -47,11 +48,12 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   customMetric('ConfigurationReturned', 'Number of times the configuration has been returned to a user');
 
   const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
+  const configClone = cloneDeep(config);
   // delete team journals url if not coming from app version 4 or above
   if (!isAppVersionEligibleForTeamJournal(event.queryStringParameters.app_version)) {
-    delete config.journal.teamJournalUrl;
+    delete configClone.journal.teamJournalUrl;
   }
-  return createResponse(config);
+  return createResponse(configClone);
 }
 
 const getStaffNumberFromRequestContext = (requestContext: APIGatewayEventRequestContext): string | null => {

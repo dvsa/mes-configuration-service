@@ -44,6 +44,10 @@ describe('handler', () => {
   describe('handler', () => {
 
     it('should return 200 when the request was successful', async () => {
+      dummyApigwEvent.queryStringParameters = {
+        app_version : '4.0',
+      };
+
       const resp: any = await handler(dummyApigwEvent);
 
       expect(resp.statusCode).toBe(200);
