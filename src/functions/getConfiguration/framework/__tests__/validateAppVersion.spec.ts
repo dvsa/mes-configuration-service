@@ -1,4 +1,4 @@
-import { isAllowedAppVersion } from '../validateAppVersion';
+import { isAllowedAppVersion, isAppVersionEligibleForTeamJournal } from '../validateAppVersion';
 
 describe('validateAppVersion', () => {
 
@@ -50,6 +50,16 @@ describe('validateAppVersion', () => {
     it('should return false if it is not an allowed app version - higher minor version then current', () => {
       const result = isAllowedAppVersion('1.8', '2.1');
       expect(result).toEqual(false);
+    });
+  });
+
+  describe('isAppVersionEligibleForTeamJournal', () => {
+    it('should return true if 4 or above', () => {
+      expect(isAppVersionEligibleForTeamJournal('4.10.1')).toEqual(true);
+    });
+
+    it('should return false if below version 4', () => {
+      expect(isAppVersionEligibleForTeamJournal('3.10.1')).toEqual(false);
     });
   });
 });

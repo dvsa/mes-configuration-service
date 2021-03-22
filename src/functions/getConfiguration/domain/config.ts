@@ -32,6 +32,7 @@ export const config: RemoteConfig = {
     journalUrl: `${baseApiUrl}/journals/{staffNumber}/personal`,
     searchBookingUrl: `${baseApiUrl}/journals/{staffNumber}/search`,
     delegatedExaminerSearchBookingUrl: `${baseApiUrl}/delegated-bookings/{applicationReference}`,
+    teamJournalUrl: `${baseApiUrl}/journals/testcentre`,
     autoRefreshInterval: generateautoRefreshInterval(env),
     numberOfDaysToView: 14,
     allowTests: true,
