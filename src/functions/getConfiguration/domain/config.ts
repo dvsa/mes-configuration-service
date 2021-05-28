@@ -13,7 +13,7 @@ const generateAllowedTestCategories = (env: string): string[] => {
 
 const generateApprovedDeviceIdentifiers = (env: string): string[] => {
   return productionLikeEnvs.includes(env as Scope) ? ['iPad7,4', 'iPad11,4']
-   : ['iPad7,4', 'iPad11,4', 'x86_64', 'iPad7,3'];
+   : ['iPad7,4', 'iPad11,4', 'x86_64', 'iPad7,3', 'iPad11,7'];
 };
 
 const generateautoRefreshInterval = (env: string): number => {
