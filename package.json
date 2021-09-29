@@ -14,7 +14,7 @@
     "aws-sdk": "^2.901.0",
     "compare-versions": "^3.5.1",
     "lodash": "^4.17.21",
-    "moment": "^2.23.0"
+    "moment": "^2.29.1"
   },
   "devDependencies": {
     "@dvsa/mes-config-schema": "^1.2.0",
