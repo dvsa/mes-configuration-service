@@ -1,6 +1,6 @@
 import { handler } from '../handler';
 import * as createResponse from '../../../../common/application/utils/createResponse';
-import { APIGatewayEvent } from 'aws-lambda';
+import { APIGatewayEvent, APIGatewayProxyEvent } from 'aws-lambda';
 import { config } from '../../domain/config';
 import { Mock, Times, It } from 'typemoq';
 import * as configBuilder from '../../domain/config-builder';
@@ -86,19 +86,19 @@ describe('handler', () => {
       expect('teamJournalUrl' in journalData).toEqual(false);
     });
 
-    it('should return 400 when there are no path parameters', async() => {
-      delete dummyApigwEvent.pathParameters;
+    it('should return 400 when there are no path parameters', async () => {
+      const { pathParameters, ...mockDummyApigwEvent } = dummyApigwEvent;
 
-      const resp = await handler(dummyApigwEvent);
+      const resp = await handler(mockDummyApigwEvent as APIGatewayProxyEvent);
 
       expect(resp.statusCode).toBe(400);
       expect(createResponse.default).toHaveBeenCalledWith(errorMessages.NO_SCOPE, 400);
     });
 
-    it('should return 400 when there is no scope path parameter', async() => {
+    it('should return 400 when there is no scope path parameter', async () => {
       dummyApigwEvent.pathParameters ?
-      delete dummyApigwEvent.pathParameters.scope :
-      fail('dummyApigwEvent.pathParameters is null');
+        delete dummyApigwEvent.pathParameters.scope :
+        fail('dummyApigwEvent.pathParameters is null');
 
       const resp = await handler(dummyApigwEvent);
 
@@ -106,19 +106,19 @@ describe('handler', () => {
       expect(createResponse.default).toHaveBeenCalledWith(errorMessages.NO_SCOPE, 400);
     });
 
-    it('should return 400 when there are no query string values', async() => {
-      delete dummyApigwEvent.queryStringParameters;
+    it('should return 400 when there are no query string values', async () => {
+      const { queryStringParameters, ...mockDummyApigwEvent } = dummyApigwEvent;
 
-      const resp = await handler(dummyApigwEvent);
+      const resp = await handler(mockDummyApigwEvent as APIGatewayProxyEvent);
 
       expect(resp.statusCode).toBe(400);
       expect(createResponse.default).toHaveBeenCalledWith(errorMessages.NO_APP_VERSION, 400);
     });
 
-    it('should return 400 response when app_version is missing from the query string', async() => {
+    it('should return 400 response when app_version is missing from the query string', async () => {
       dummyApigwEvent.queryStringParameters ?
-    delete dummyApigwEvent.queryStringParameters.app_version :
-    fail('dummyApigwEvent.queryStringParameters is null');
+        delete dummyApigwEvent.queryStringParameters.app_version :
+        fail('dummyApigwEvent.queryStringParameters is null');
 
       const resp = await handler(dummyApigwEvent);
 
@@ -137,8 +137,8 @@ describe('handler', () => {
 
     it('should return 401 when there is no staff number in the authoriser', async () => {
       dummyApigwEvent.requestContext.authorizer ?
-      delete dummyApigwEvent.requestContext.authorizer.staffNumber :
-      fail('authoriser is null');
+        delete dummyApigwEvent.requestContext.authorizer.staffNumber :
+        fail('authoriser is null');
 
       const resp = await handler(dummyApigwEvent);
 
