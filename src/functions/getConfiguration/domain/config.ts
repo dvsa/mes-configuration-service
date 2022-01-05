@@ -45,7 +45,7 @@ export const config: RemoteConfig = {
   },
   tests: {
     testSubmissionUrl: `${baseApiUrl}/test-results`,
-    autoSendInterval: 300000,
+    autoSendInterval: 120000,
   },
   user: {
     findUserUrl: `${baseApiUrl}/users/{staffNumber}`,
