@@ -47,7 +47,7 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   info('Returning configuration for ', scope);
   customMetric('ConfigurationReturned', 'Number of times the configuration has been returned to a user');
 
-  const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
+  const config: RemoteConfig = await buildConfig(staffNumber, examinerRole, event.queryStringParameters.app_version);
   const configClone = cloneDeep(config);
   // delete team journals url if not coming from app version 4 or above
   if (!isAppVersionEligibleForTeamJournal(event.queryStringParameters.app_version)) {
