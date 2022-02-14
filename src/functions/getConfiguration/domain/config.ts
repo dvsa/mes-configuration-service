@@ -1,10 +1,16 @@
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
-import { environment } from '../framework/environment';
+import {
+  environment,
+  getDES3LiveCats,
+  getDES4LiveCats,
+  getDES4PilotCats,
+  getDES4UatCats,
+  getLiveAppVersion,
+} from '../framework/environment';
 import { getBaseApiUrl } from '../framework/getBaseApiUrl';
 import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
 import { ExaminerRole } from '../constants/ExaminerRole';
-import { TestCategory } from '@dvsa/mes-test-schema/category-definitions/common/test-category';
 import * as compareVersions from 'compare-versions';
 import { startsWith } from 'lodash';
 import { info } from '@dvsa/mes-microservice-common/application/utils/logger';
@@ -23,37 +29,38 @@ const generateApprovedDeviceIdentifiers = (env: string): string[] => {
 export const getAllowedTestCategories = (appVersion: string): string[] => {
   const isDES4: boolean = startsWith(appVersion, '4');
   info(`Getting categories for DES ${isDES4 ? '4' : '3'} for app version ${appVersion}`);
+
   if (isDES4) {
-    const des4Cats: TestCategory[] = mapToCatArray(process.env.DES4_LIVE_CATS);
-    const env = process.env.ENVIRONMENT as Scope;
-    const isDev = env !== Scope.PROD && env !== Scope.PERF && env !== Scope.UAT;
+    const des4Cats = mapToCatArray(getDES4LiveCats());
+
+    const isDev: boolean = [Scope.PROD, Scope.PERF, Scope.UAT].every(env => env !== environment());
 
     if (isDev) {
       return [
-        ...mapToCatArray(process.env.DES3_LIVE_CATS),
-        ...mapToCatArray(process.env.DES4_LIVE_CATS),
+        ...mapToCatArray(getDES3LiveCats()),
+        ...mapToCatArray(getDES4LiveCats()),
       ].filter((cat, pos, self) => self.indexOf(cat) === pos);
     }
 
-    const isUAT: boolean = env === Scope.UAT;
+    const isUAT: boolean = [Scope.UAT].some(env => env === environment());
 
-    if (isUAT && process.env.DES4_UAT_CATS) {
-      return [...des4Cats, ...mapToCatArray(process.env.DES4_UAT_CATS)];
+    if (isUAT && getDES4UatCats()) {
+      return [...des4Cats, ...mapToCatArray(getDES4UatCats())];
     }
 
-    const isPilot: boolean = compareVersions.compare(appVersion, process.env.LIVE_APP_VERSION as string, '>');
+    const isPilot: boolean = compareVersions.compare(appVersion, getLiveAppVersion() as string, '>');
 
-    if (isPilot && process.env.DES4_PILOT_CATS) {
-      return [...des4Cats, ...mapToCatArray(process.env.DES4_LIVE_PILOT_CATS)];
+    if (isPilot && getDES4PilotCats()) {
+      return [...des4Cats, ...mapToCatArray(getDES4PilotCats())];
     }
     return des4Cats;
   }
   // DES3
-  return mapToCatArray(process.env.DES3_LIVE_CATS);
+  return mapToCatArray(getDES3LiveCats());
 };
 
 const mapToCatArray = (catString: string | undefined) =>
-  (catString || '').split(',').filter(cat => cat !== '').map(cat => cat as TestCategory);
+  (catString || '').split(',').filter(cat => cat !== '').map(cat => cat);
 
 const generateautoRefreshInterval = (env: string): number => {
   return productionLikeEnvs.includes(env as Scope) ? (300 * 1000) : (20 * 1000);

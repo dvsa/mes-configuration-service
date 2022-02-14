@@ -1,38 +1,38 @@
-// import { Mock, It, Times } from 'typemoq';
-// import * as testPermissionRepo from '../../framework/test-permission-repository';
-// import { TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
-// import { buildConfig } from '../config-builder';
-// import { ExaminerRole } from '../../constants/ExaminerRole';
-//
-// describe('ConfigBuilder', () => {
-//   const moqTestPermissionRepo = Mock.ofInstance(testPermissionRepo.getTestPermissionPeriods);
-//
-//   beforeEach(() => {
-//     moqTestPermissionRepo.reset();
-//
-//     spyOn(testPermissionRepo, 'getTestPermissionPeriods').and.callFake(moqTestPermissionRepo.object);
-//   });
-//
-//   describe('buildConfig', () => {
-//     it('should put the examiners TestPermissionPeriods into the config model', async () => {
-//       const fakePermissions: TestPermissionPeriod[] = [
-//         {
-//           testCategory: 'B',
-//           from: '2019-08-01',
-//           to: '2019-08-20',
-//         },
-//         {
-//           testCategory: 'B',
-//           from: '2019-12-01',
-//           to: null,
-//         },
-//       ];
-//       moqTestPermissionRepo.setup(x => x(It.isAny())).returns(() => Promise.resolve(fakePermissions));
-//
-//       const result = await buildConfig('999', ExaminerRole.LDTM);
-//
-//       expect(result.journal.testPermissionPeriods).toBe(fakePermissions);
-//       moqTestPermissionRepo.verify(x => x(It.isValue('999')), Times.once());
-//     });
-//   });
-// });
+import { Mock, It, Times } from 'typemoq';
+import * as testPermissionRepo from '../../framework/test-permission-repository';
+import { TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
+import { buildConfig } from '../config-builder';
+import { ExaminerRole } from '../../constants/ExaminerRole';
+
+describe('ConfigBuilder', () => {
+  const moqTestPermissionRepo = Mock.ofInstance(testPermissionRepo.getTestPermissionPeriods);
+
+  beforeEach(() => {
+    moqTestPermissionRepo.reset();
+
+    spyOn(testPermissionRepo, 'getTestPermissionPeriods').and.callFake(moqTestPermissionRepo.object);
+  });
+
+  describe('buildConfig', () => {
+    it('should put the examiners TestPermissionPeriods into the config model', async () => {
+      const fakePermissions: TestPermissionPeriod[] = [
+        {
+          testCategory: 'B',
+          from: '2019-08-01',
+          to: '2019-08-20',
+        },
+        {
+          testCategory: 'B',
+          from: '2019-12-01',
+          to: null,
+        },
+      ];
+      moqTestPermissionRepo.setup(x => x(It.isAny())).returns(() => Promise.resolve(fakePermissions));
+
+      const result = await buildConfig('999', ExaminerRole.LDTM, '4.1.0.0');
+
+      expect(result.journal.testPermissionPeriods).toEqual(fakePermissions);
+      moqTestPermissionRepo.verify(x => x(It.isValue('999')), Times.once());
+    });
+  });
+});
