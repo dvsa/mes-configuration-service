@@ -30,7 +30,7 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
     return createResponse(errorMessages.NO_APP_VERSION, 400);
   }
 
-  const formattedAppVersion = formatAppVersion(event.queryStringParameters.app_version);
+  const formattedAppVersion: string = formatAppVersion(event.queryStringParameters.app_version);
 
   if (!isAllowedAppVersion(formattedAppVersion, minimumAppVersion)) {
     error(errorMessages.APP_VERSION_BELOW_MINIMUM);
