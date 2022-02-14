@@ -24,13 +24,14 @@ const addTestPermissionPeriods = async (
 ): Promise<RemoteConfig> => {
   try {
     const testPermissionPeriods: TestPermissionPeriod[] = await getTestPermissionPeriods(staffNumber);
-    const allowedTestsForApp: string[] = getAllowedTestCategories(appVersion);
+    const allowedTestCategories: string[] = getAllowedTestCategories(appVersion);
 
     return {
       ...builtConfig,
       journal: {
         ...builtConfig.journal,
-        testPermissionPeriods: testPermissionPeriods.filter(period => allowedTestsForApp.includes(period.testCategory)),
+        allowedTestCategories,
+        testPermissionPeriods,
       },
     };
   } catch (err) {

@@ -22,24 +22,38 @@ const generateApprovedDeviceIdentifiers = (env: string): string[] => {
 
 export const getAllowedTestCategories = (appVersion: string): string[] => {
   const isDES4: boolean = startsWith(appVersion, '4');
-
   info(`Getting categories for DES ${isDES4 ? '4' : '3'} for app version ${appVersion}`);
-
   if (isDES4) {
-    const des4Cats: TestCategory[] = mapToCatArray(process.env.DES4_CATS);
+    const des4Cats: TestCategory[] = mapToCatArray(process.env.DES4_LIVE_CATS);
+    const env = process.env.ENVIRONMENT as Scope;
+    const isDev = env !== Scope.PROD && env !== Scope.PERF && env !== Scope.UAT;
+
+    if (isDev) {
+      return [
+        ...mapToCatArray(process.env.DES3_LIVE_CATS),
+        ...mapToCatArray(process.env.DES4_LIVE_CATS),
+      ].filter((cat, pos, self) => self.indexOf(cat) === pos);
+    }
+
+    const isUAT: boolean = env === Scope.UAT;
+
+    if (isUAT && process.env.DES4_UAT_CATS) {
+      return [...des4Cats, ...mapToCatArray(process.env.DES4_UAT_CATS)];
+    }
 
     const isPilot: boolean = compareVersions.compare(appVersion, process.env.LIVE_APP_VERSION as string, '>');
 
     if (isPilot && process.env.DES4_PILOT_CATS) {
-      return [...des4Cats, ...mapToCatArray(process.env.DES4_PILOT_CATS)];
+      return [...des4Cats, ...mapToCatArray(process.env.DES4_LIVE_PILOT_CATS)];
     }
     return des4Cats;
   }
   // DES3
-  return mapToCatArray(process.env.DES3_CATS);
+  return mapToCatArray(process.env.DES3_LIVE_CATS);
 };
 
-const mapToCatArray = (catString: string | undefined) => (catString || '').split(',').map(cat => cat as TestCategory);
+const mapToCatArray = (catString: string | undefined) =>
+  (catString || '').split(',').filter(cat => cat !== '').map(cat => cat as TestCategory);
 
 const generateautoRefreshInterval = (env: string): number => {
   return productionLikeEnvs.includes(env as Scope) ? (300 * 1000) : (20 * 1000);
