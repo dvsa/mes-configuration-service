@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@dvsa/mes-microservice-common": "0.7.0",
+    "@dvsa/mes-test-schema": "3.37.1",
     "aws-sdk": "^2.901.0",
     "compare-versions": "^3.5.1",
     "lodash": "^4.17.21",
@@ -52,7 +53,7 @@
     "compile": "tsc",
     "lint": "tslint --project tslint.json",
     "package": "./package.sh",
-    "security-scan": "git secrets --scan && git log -p | scanrepo",
+    "security-scan": "git secrets --scan",
     "start": "npm run compile && sls offline start",
     "test": "npm run compile && jasmine",
     "test:jasmine-coverage": "nyc npm run test",

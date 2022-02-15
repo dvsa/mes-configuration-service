@@ -8,7 +8,7 @@ import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
 import { getMinimumAppVersion } from './environment';
 import * as errorMessages from './errors.constants';
-import { isAllowedAppVersion, isAppVersionEligibleForTeamJournal } from './validateAppVersion';
+import { formatAppVersion, isAllowedAppVersion, isAppVersionEligibleForTeamJournal } from './validateAppVersion';
 import { cloneDeep } from 'lodash';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
@@ -30,7 +30,9 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
     return createResponse(errorMessages.NO_APP_VERSION, 400);
   }
 
-  if (!isAllowedAppVersion(event.queryStringParameters.app_version, minimumAppVersion)) {
+  const formattedAppVersion: string = formatAppVersion(event.queryStringParameters.app_version);
+
+  if (!isAllowedAppVersion(formattedAppVersion, minimumAppVersion)) {
     error(errorMessages.APP_VERSION_BELOW_MINIMUM);
     return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
   }
@@ -47,10 +49,10 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   info('Returning configuration for ', scope);
   customMetric('ConfigurationReturned', 'Number of times the configuration has been returned to a user');
 
-  const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
+  const config: RemoteConfig = await buildConfig(staffNumber, examinerRole, formattedAppVersion);
   const configClone = cloneDeep(config);
   // delete team journals url if not coming from app version 4 or above
-  if (!isAppVersionEligibleForTeamJournal(event.queryStringParameters.app_version)) {
+  if (!isAppVersionEligibleForTeamJournal(formattedAppVersion)) {
     delete configClone.journal.teamJournalUrl;
   }
   return createResponse(configClone);

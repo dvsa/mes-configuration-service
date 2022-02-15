@@ -1,18 +1,17 @@
 import { isAllowedAppVersion, isAppVersionEligibleForTeamJournal } from '../validateAppVersion';
 
 describe('validateAppVersion', () => {
-
   describe('isAllowedAppVersion', () => {
     it('should return true if it is an allowed app version - minor version difference', () => {
-      const result = isAllowedAppVersion('2.1', '2.0');
+      const result = isAllowedAppVersion('2.1.0.0', '2.0.0.0');
       expect(result).toEqual(true);
     });
     it('should return true if it is an allowed app version - major version difference', () => {
-      const result = isAllowedAppVersion('2.1', '1.0');
+      const result = isAllowedAppVersion('2.1.0.0', '1.0.0.0');
       expect(result).toEqual(true);
     });
     it('should return true if it is an allowed app version - higher minor version then current', () => {
-      const result = isAllowedAppVersion('2.1', '1.8');
+      const result = isAllowedAppVersion('2.1.0.0', '1.8.0.0');
       expect(result).toEqual(true);
     });
     it('should return false if the current app version is formatted incorrectly test 1', () => {

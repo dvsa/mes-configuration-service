@@ -10,16 +10,16 @@ import * as errorMessages from '../errors.constants';
 const lambdaTestUtils = require('aws-lambda-test-utils');
 
 describe('handler', () => {
-
   let dummyApigwEvent: APIGatewayEvent;
   const moqConfigBuilder = Mock.ofInstance(configBuilder.buildConfig);
 
   beforeEach(() => {
-    process.env.MINIMUM_APP_VERSION = '2.0';
+    process.env.MINIMUM_APP_VERSION = '2.0.0.0';
 
     moqConfigBuilder.reset();
 
-    moqConfigBuilder.setup(x => x(It.isAny(), It.isAny())).returns(() => Promise.resolve(config));
+    moqConfigBuilder.setup(x => x(It.isAny(), It.isAny(), It.isAnyString()))
+      .returns(() => Promise.resolve(config));
 
     spyOn(createResponse, 'default').and.callThrough();
     spyOn(configBuilder, 'buildConfig').and.callFake(moqConfigBuilder.object);
@@ -42,8 +42,7 @@ describe('handler', () => {
   });
 
   describe('handler', () => {
-
-    it('should return 200 when the request was successful', async () => {
+    it('should return 200 when the request was successful for 2 digit app version', async () => {
       dummyApigwEvent.queryStringParameters = {
         app_version : '4.0',
       };
@@ -51,9 +50,22 @@ describe('handler', () => {
       const resp: any = await handler(dummyApigwEvent);
 
       expect(resp.statusCode).toBe(200);
-      expect(createResponse.default)
-        .toHaveBeenCalledWith(config);
-      moqConfigBuilder.verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE)), Times.once());
+      expect(createResponse.default).toHaveBeenCalledWith(config);
+      moqConfigBuilder
+        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE), It.isValue('4.0.0.0')), Times.once());
+    });
+
+    it('should return 200 when the request was successful for full app version', async () => {
+      dummyApigwEvent.queryStringParameters = {
+        app_version : '4.1.0.0',
+      };
+
+      const resp: any = await handler(dummyApigwEvent);
+
+      expect(resp.statusCode).toBe(200);
+      expect(createResponse.default).toHaveBeenCalledWith(config);
+      moqConfigBuilder
+        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE), It.isValue('4.1.0.0')), Times.once());
     });
 
     it('should contain team journal url if app version is 4 or above', async () => {
@@ -152,7 +164,7 @@ describe('handler', () => {
       expect(createResponse.default).toHaveBeenCalledWith(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
     });
     it('should return 401 when the app version is below the minimum app version', async () => {
-      process.env.MINIMUM_APP_VERSION = '2.1';
+      process.env.MINIMUM_APP_VERSION = '2.1.0.0';
 
       const resp = await handler(dummyApigwEvent);
 

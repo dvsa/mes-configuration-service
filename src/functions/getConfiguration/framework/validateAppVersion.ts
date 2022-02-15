@@ -9,7 +9,14 @@ export const isAllowedAppVersion = (requestAppVersion: string , minimumAppVersio
 };
 
 const isVersionCorrectFormat = (appVersion: string): boolean =>
-    new RegExp('^[0-9]+\.[0-9]+$').test(appVersion);
+    new RegExp('^([0-9]+.){3}[0-9]+$').test(appVersion);
+
+export const formatAppVersion = (appVersion: string): string => {
+  if (new RegExp('^[0-9]+\.[0-9]+$').test(appVersion)) {
+    return appVersion.concat('.0.0');
+  }
+  return appVersion;
+};
 
 export const isAppVersionEligibleForTeamJournal = (requestAppVersion: string): boolean => {
   const majorVersion: number = parseInt(requestAppVersion.substr(0, 1), 10);

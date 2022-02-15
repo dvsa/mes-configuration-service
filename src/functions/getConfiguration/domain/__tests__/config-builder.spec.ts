@@ -29,9 +29,9 @@ describe('ConfigBuilder', () => {
       ];
       moqTestPermissionRepo.setup(x => x(It.isAny())).returns(() => Promise.resolve(fakePermissions));
 
-      const result = await buildConfig('999', ExaminerRole.LDTM);
+      const result = await buildConfig('999', ExaminerRole.LDTM, '4.1.0.0');
 
-      expect(result.journal.testPermissionPeriods).toBe(fakePermissions);
+      expect(result.journal.testPermissionPeriods).toEqual(fakePermissions);
       moqTestPermissionRepo.verify(x => x(It.isValue('999')), Times.once());
     });
   });
