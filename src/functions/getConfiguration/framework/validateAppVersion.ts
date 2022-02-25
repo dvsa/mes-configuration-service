@@ -9,7 +9,7 @@ export const isAllowedAppVersion = (requestAppVersion: string , minimumAppVersio
 };
 
 const isVersionCorrectFormat = (appVersion: string): boolean =>
-    new RegExp('^([0-9]+.){3}[0-9]+$').test(appVersion);
+  new RegExp('^([0-9]+.){3}[0-9]+$').test(appVersion);
 
 export const formatAppVersion = (appVersion: string): string => {
   if (new RegExp('^[0-9]+\.[0-9]+$').test(appVersion)) {
