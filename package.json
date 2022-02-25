@@ -22,7 +22,7 @@
     "test:integration": "npm run compile && jasmine build/spec/configuration-service.spec.js"
   },
   "dependencies": {
-    "@dvsa/mes-microservice-common": "0.7.0",
+    "@dvsa/mes-microservice-common": "0.8.1",
     "aws-sdk": "^2.1012.0",
     "compare-versions": "^3.6.0",
     "lodash": "^4.17.21"
