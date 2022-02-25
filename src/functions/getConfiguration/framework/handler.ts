@@ -70,9 +70,9 @@ const getExaminerRoleFromRequestContext = (requestContext: APIGatewayEventReques
     const { examinerRole } = requestContext.authorizer;
 
     switch (examinerRole) {
-      case 'DLG': return ExaminerRole.DLG;
-      case 'LDTM': return ExaminerRole.LDTM;
-      default: return ExaminerRole.DE;
+    case 'DLG': return ExaminerRole.DLG;
+    case 'LDTM': return ExaminerRole.LDTM;
+    default: return ExaminerRole.DE;
     }
   }
   // If role is missing we default to DE
