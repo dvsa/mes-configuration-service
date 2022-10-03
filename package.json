@@ -24,8 +24,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@dvsa/mes-microservice-common": "0.8.1",
-    "aws-sdk": "^2.1226.0",
+    "@dvsa/mes-microservice-common": "0.8.3",
     "compare-versions": "^5.0.1",
     "lodash": "^4.17.21"
   },
