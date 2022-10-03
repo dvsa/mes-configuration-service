@@ -2,6 +2,15 @@
 
 A serverless microservice responsible for providing configuration information for the MES mobile app.
 
+## Dependencies
+
+DVSA dependencies have been moved from npm to github so in order to install/update any private @DVSA packages
+you are required to have an entry in your global `~/.npmrc` file as follows:
+
+```shell
+//npm.pkg.github.com/:_authToken=<your auth token here>
+```
+
 ## Structure
 
 All serverless functions live in dedicated directories in `src/functions`.
@@ -36,11 +45,3 @@ To run the unit tests, simply run:
 ```shell
 npm test
 ```
-
-## Dependencies
-
-DVSA dependencies have been moved from npm to github so in order to install/update any private @DVSA packages
-you are required to have an entry in your global `~/.npmrc` file as as follows:
-
-```shell
-//npm.pkg.github.com/:_authToken=<your auth token here>
