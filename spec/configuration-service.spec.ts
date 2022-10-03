@@ -1,5 +1,5 @@
 import * as supertest from 'supertest';
-import { startSlsOffline, stopSlsOffline } from './helpers/integration-test-lifecycle';
+import { startSlsOffline } from './helpers/integration-test-lifecycle';
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
@@ -15,9 +15,6 @@ describe('integration test', () => {
       }
       done();
     });
-  });
-  afterAll(() => {
-    stopSlsOffline();
   });
 
   it('should respond 200 for an item that exists', (done) => {
