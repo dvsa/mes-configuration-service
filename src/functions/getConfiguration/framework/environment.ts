@@ -2,6 +2,8 @@ export const environment = () => process.env.ENVIRONMENT || 'local';
 
 export const getMinimumAppVersion = () => process.env.MINIMUM_APP_VERSION;
 
+export const getDes4MinimumAppVersion = () => process.env.DES4_MINIMUM_APP_VERSION;
+
 export const getLiveAppVersion = () => process.env.LIVE_APP_VERSION;
 
 export const getDES4LiveCats = () => process.env.DES4_LIVE_CATS;

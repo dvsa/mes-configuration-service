@@ -15,6 +15,7 @@ describe('handler', () => {
 
   beforeEach(() => {
     process.env.MINIMUM_APP_VERSION = '2.0.0.0';
+    process.env.DES4_MINIMUM_APP_VERSION = '4.0.0.0';
 
     moqConfigBuilder.reset();
 

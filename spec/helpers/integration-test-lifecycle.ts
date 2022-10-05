@@ -21,3 +21,12 @@ export const startSlsOffline = (done: any) => {
     done(errData);
   });
 };
+
+export const stopSlsOffline = () => {
+  // Usage of negative PID kills the process group
+  const { pid } = slsOfflineProcess;
+  if (typeof pid === 'number') {
+    process.kill(-pid);
+    console.log('Serverless Offline stopped');
+  }
+};

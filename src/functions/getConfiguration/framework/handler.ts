@@ -6,16 +6,23 @@ import { Scope } from '../domain/scopes.constants';
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
-import { getMinimumAppVersion } from './environment';
+import { getDes4MinimumAppVersion, getMinimumAppVersion } from './environment';
 import * as errorMessages from './errors.constants';
 import { formatAppVersion, isAllowedAppVersion, isAppVersionEligibleForTeamJournal } from './validateAppVersion';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, startsWith } from 'lodash';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
 
   const minimumAppVersion = getMinimumAppVersion();
+  const des4minimumAppVersion = getDes4MinimumAppVersion();
+
   if (minimumAppVersion === undefined || minimumAppVersion.trim().length === 0) {
+    error(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE);
+    return createResponse(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
+  }
+
+  if (des4minimumAppVersion === undefined || des4minimumAppVersion.trim().length === 0) {
     error(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE);
     return createResponse(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
   }
@@ -31,8 +38,9 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   }
 
   const formattedAppVersion: string = formatAppVersion(event.queryStringParameters.app_version);
+  const isDES4: boolean = startsWith(formattedAppVersion, '4');
 
-  if (!isAllowedAppVersion(formattedAppVersion, minimumAppVersion)) {
+  if (!isAllowedAppVersion(formattedAppVersion, isDES4 ? des4minimumAppVersion : minimumAppVersion)) {
     error(errorMessages.APP_VERSION_BELOW_MINIMUM);
     return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
   }
