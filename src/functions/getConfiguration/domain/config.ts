@@ -98,7 +98,7 @@ export const config: RemoteConfig = {
   },
   driver: {
     photographUrl: `${baseApiUrl}/driver/photograph/{drivingLicenceNumber}`,
-    signatureUrl: `${baseApiUrl}/driver/signature/{staffNumber}`,
+    signatureUrl: `${baseApiUrl}/driver/signature/{drivingLicenceNumber}`,
     standardUrl: `${baseApiUrl}/driver/standard`,
   },
   requestTimeout: 40000,
