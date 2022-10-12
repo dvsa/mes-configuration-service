@@ -96,5 +96,10 @@ export const config: RemoteConfig = {
   user: {
     findUserUrl: `${baseApiUrl}/users/{staffNumber}`,
   },
+  driver: {
+    photographUrl: `${baseApiUrl}/driver/photograph/{drivingLicenceNumber}`,
+    signatureUrl: `${baseApiUrl}/driver/signature/{staffNumber}`,
+    standardUrl: `${baseApiUrl}/driver/standard`,
+  },
   requestTimeout: 40000,
 };
