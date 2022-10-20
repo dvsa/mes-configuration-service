@@ -51,9 +51,11 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
 
   const config: RemoteConfig = await buildConfig(staffNumber, examinerRole, formattedAppVersion);
   const configClone = cloneDeep(config);
-  // delete team journals url if not coming from app version 4 or above
+  // delete team journals url & driver property if not coming from app version 4 or above
   if (!isAppVersionEligibleForTeamJournal(formattedAppVersion)) {
-    delete configClone.journal.teamJournalUrl;
+    const { driver, ...des3Config } = configClone;
+    delete des3Config.journal.teamJournalUrl;
+    return createResponse(des3Config);
   }
   return createResponse(configClone);
 }
