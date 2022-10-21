@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@dvsa/mes-microservice-common": "0.8.1",
-    "aws-sdk": "^2.1012.0",
+    "aws-sdk": "^2.1226.0",
     "compare-versions": "^3.6.0",
     "lodash": "^4.17.21"
   },
