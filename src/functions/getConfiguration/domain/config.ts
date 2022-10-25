@@ -7,7 +7,7 @@ import {
   getDES4UatCats,
   getLiveAppVersion,
 } from '../framework/environment';
-import { getBaseApiUrl } from '../framework/getBaseApiUrl';
+import { getBaseApiUrl, getSearchMCBaseApiUrl } from '../framework/getBaseApiUrl';
 import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
 import { ExaminerRole } from '../constants/ExaminerRole';
@@ -68,6 +68,7 @@ const generateautoRefreshInterval = (env: string): number => {
 
 const env = environment();
 const baseApiUrl = getBaseApiUrl();
+const searchMcBaseApiUrl = getSearchMCBaseApiUrl();
 
 export const config: RemoteConfig = {
   googleAnalyticsId: getGAId(),
@@ -100,6 +101,9 @@ export const config: RemoteConfig = {
     photographUrl: `${baseApiUrl}/driver/photograph/{drivingLicenceNumber}`,
     signatureUrl: `${baseApiUrl}/driver/signature/{drivingLicenceNumber}`,
     standardUrl: `${baseApiUrl}/driver/standard`,
+  },
+  vehicle: {
+    taxMotUrl: `${searchMcBaseApiUrl}`,
   },
   requestTimeout: 40000,
 };
