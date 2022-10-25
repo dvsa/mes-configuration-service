@@ -6,6 +6,6 @@ export const getBaseApiUrl = (): string => {
 };
 
 export const getSearchMCBaseApiUrl = (): string => {
-  const url = process.env.SEARCH_MC_BASE_API_URL || 'https://dev.mes.dev-dvsacloud.uk/v1';
+  const url = process.env.SEARCH_MC_BASE_API_URL as string;
   return removeTrailingSlash(url);
 };
