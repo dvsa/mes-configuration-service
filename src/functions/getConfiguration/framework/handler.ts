@@ -8,7 +8,12 @@ import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
 import { getMinimumAppVersion } from './environment';
 import * as errorMessages from './errors.constants';
-import { formatAppVersion, isAllowedAppVersion, isAppVersionEligibleForTeamJournal } from './validateAppVersion';
+import {
+  formatAppVersion,
+  isAllowedAppVersion,
+  isAppVersionEligibleForDriverVehicle,
+  isAppVersionEligibleForTeamJournal,
+} from './validateAppVersion';
 import { cloneDeep } from 'lodash';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
@@ -56,6 +61,11 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
     const { driver, ...des3Config } = configClone;
     delete des3Config.journal.teamJournalUrl;
     return createResponse(des3Config);
+  }
+  // delete
+  if (!isAppVersionEligibleForDriverVehicle(formattedAppVersion)) {
+    const { driver, vehicle, ...configTrimmed } = configClone;
+    return createResponse(configTrimmed);
   }
   return createResponse(configClone);
 }
