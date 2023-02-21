@@ -44,7 +44,7 @@ describe('handler', () => {
   describe('handler', () => {
     it('should return 200 when the request was successful for 2 digit app version', async () => {
       dummyApigwEvent.queryStringParameters = {
-        app_version : '4.7',
+        app_version : '5.8',
       };
 
       const resp: any = await handler(dummyApigwEvent);
@@ -52,12 +52,12 @@ describe('handler', () => {
       expect(resp.statusCode).toBe(200);
       expect(createResponse.default).toHaveBeenCalledWith(config);
       moqConfigBuilder
-        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE), It.isValue('4.7.0.0')), Times.once());
+        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE), It.isValue('5.8.0.0')), Times.once());
     });
 
     it('should return 200 when the request was successful for full app version', async () => {
       dummyApigwEvent.queryStringParameters = {
-        app_version : '4.6.3.0',
+        app_version : '5.6.3.0',
       };
 
       const resp: any = await handler(dummyApigwEvent);
@@ -65,7 +65,7 @@ describe('handler', () => {
       expect(resp.statusCode).toBe(200);
       expect(createResponse.default).toHaveBeenCalledWith(config);
       moqConfigBuilder
-        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE), It.isValue('4.6.3.0')), Times.once());
+        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE), It.isValue('5.6.3.0')), Times.once());
     });
 
     it('should contain team journal url if app version is 4 or above', async () => {

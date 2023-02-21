@@ -11,7 +11,7 @@ import * as errorMessages from './errors.constants';
 import {
   formatAppVersion,
   isAllowedAppVersion,
-  isAppVersionEligibleForDriverVehicle,
+  isAppVersionEligibleForDriverVehicle, isAppVersionEligibleForRefDataTestCentre,
   isAppVersionEligibleForTeamJournal,
 } from './validateAppVersion';
 import { cloneDeep } from 'lodash';
@@ -65,6 +65,10 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   // delete
   if (!isAppVersionEligibleForDriverVehicle(formattedAppVersion)) {
     const { driver, vehicle, ...configTrimmed } = configClone;
+    return createResponse(configTrimmed);
+  }
+  if (!isAppVersionEligibleForRefDataTestCentre(formattedAppVersion)) {
+    const { refData, ...configTrimmed } = configClone;
     return createResponse(configTrimmed);
   }
   return createResponse(configClone);

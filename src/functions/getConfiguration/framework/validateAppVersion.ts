@@ -18,11 +18,17 @@ export const formatAppVersion = (appVersion: string): string => {
   return appVersion;
 };
 
+// @TODO: Should be safe to now remove now DES3 is no more
 export const isAppVersionEligibleForTeamJournal = (requestAppVersion: string): boolean => {
   const majorVersion: number = parseInt(requestAppVersion.substr(0, 1), 10);
   return majorVersion >= 4;
 };
 
+// @TODO: Should be safe to now remove now as live app is 4.7.0.x
 export const isAppVersionEligibleForDriverVehicle = (requestAppVersion: string): boolean => {
   return compareVersions.compare(requestAppVersion, '4.6.2.0', '>');
+};
+
+export const isAppVersionEligibleForRefDataTestCentre = (requestAppVersion: string): boolean => {
+  return compareVersions.compare(requestAppVersion, '4.7.2.0', '>=');
 };
