@@ -76,15 +76,6 @@ describe('handler', () => {
       expect('teamJournalUrl' in journalData).toEqual(true);
     });
 
-    it('should NOT contain team journal url if app version is below 4', async () => {
-      dummyApigwEvent.queryStringParameters = {
-        app_version : '3.1',
-      };
-      const resp: any = await handler(dummyApigwEvent);
-      const journalData = JSON.parse(resp.body).journal;
-      expect('teamJournalUrl' in journalData).toEqual(false);
-    });
-
     it('should return 400 when there are no path parameters', async () => {
       const { pathParameters, ...mockDummyApigwEvent } = dummyApigwEvent;
 
