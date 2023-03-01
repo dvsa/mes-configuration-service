@@ -11,10 +11,9 @@ import * as errorMessages from './errors.constants';
 import {
   formatAppVersion,
   isAllowedAppVersion,
-  isAppVersionEligibleForDriverVehicle, isAppVersionEligibleForRefDataTestCentre,
-  isAppVersionEligibleForTeamJournal,
 } from './validateAppVersion';
 import { cloneDeep } from 'lodash';
+import { Metric } from '../../../common/application/metric/metric';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
@@ -52,25 +51,12 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
 
   const scope: Scope = event.pathParameters.scope as Scope;
   info('Returning configuration for ', scope);
-  customMetric('ConfigurationReturned', 'Number of times the configuration has been returned to a user');
 
-  const config: RemoteConfig = await buildConfig(staffNumber, examinerRole, formattedAppVersion);
+  const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
   const configClone = cloneDeep(config);
-  // delete team journals url & driver property if not coming from app version 4 or above
-  if (!isAppVersionEligibleForTeamJournal(formattedAppVersion)) {
-    const { driver, ...des3Config } = configClone;
-    delete des3Config.journal.teamJournalUrl;
-    return createResponse(des3Config);
-  }
-  // delete
-  if (!isAppVersionEligibleForDriverVehicle(formattedAppVersion)) {
-    const { driver, vehicle, ...configTrimmed } = configClone;
-    return createResponse(configTrimmed);
-  }
-  if (!isAppVersionEligibleForRefDataTestCentre(formattedAppVersion)) {
-    const { refData, ...configTrimmed } = configClone;
-    return createResponse(configTrimmed);
-  }
+
+  customMetric(Metric.ConfigurationReturned, 'Number of times the configuration has been returned to a user');
+
   return createResponse(configClone);
 }
 
