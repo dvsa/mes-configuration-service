@@ -105,5 +105,8 @@ export const config: RemoteConfig = {
   vehicle: {
     taxMotUrl: `${searchMcBaseApiUrl}`,
   },
+  refData: {
+    testCentreUrl: `${baseApiUrl}/refdata/testcentre`,
+  },
   requestTimeout: 40000,
 };
