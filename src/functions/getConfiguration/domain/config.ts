@@ -106,7 +106,7 @@ export const config: RemoteConfig = {
     taxMotUrl: `${searchMcBaseApiUrl}`,
   },
   refData: {
-    testCentreUrl: `${baseApiUrl}/refdata/testcentre`,
+    testCentreUrl: `${baseApiUrl}/refdata/testcentres`,
   },
   requestTimeout: 40000,
 };
