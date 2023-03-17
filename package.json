@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "author": "DVSA",
   "license": "MIT",
-  "description": "A suite of Lambda functions for retriving configuration for mes",
+  "description": "A suite of Lambda functions for retrieving configuration for mes",
   "homepage": "https://github.com/dvsa/mes-configuration-service#README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dvsa/mes-configuration-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dvsa/mes-configuration-service/issues"
   },
   "scripts": {
     "clean": "rimraf build artefacts",
@@ -44,6 +47,7 @@
     "jasmine": "^4.4.0",
     "jasmine-spec-reporter": "^7.0.0",
     "json-schema-to-typescript": "^11.0.2",
+    "lint-staged": "^13.2.0",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
     "serverless": "^3.22.0",
@@ -77,7 +81,9 @@
     "produce-source-map": true,
     "instrument": true
   },
-  "bugs": {
-    "url": "https://github.com/dvsa/mes-configuration-service/issues"
+  "lint-staged": {
+    "./src/**/*.ts": [
+      "npm run lint:fix"
+    ]
   }
 }
