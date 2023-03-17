@@ -23,3 +23,7 @@ export const isAppVersionEligibleForTeamJournal = (requestAppVersion: string): b
   const majorVersion: number = parseInt(requestAppVersion.substr(0, 1), 10);
   return majorVersion >= 4;
 };
+
+export const isEligibleFor = (requestAppVersion: string, versionToInclude: string): boolean => {
+  return compareVersions.compare(requestAppVersion, versionToInclude, '>=');
+};
