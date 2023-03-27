@@ -18,8 +18,7 @@ describe('handler', () => {
 
     moqConfigBuilder.reset();
 
-    moqConfigBuilder.setup(x => x(It.isAny(), It.isAny(), It.isAnyString()))
-      .returns(() => Promise.resolve(config));
+    moqConfigBuilder.setup(x => x(It.isAny(), It.isAny())).returns(() => Promise.resolve(config));
 
     spyOn(createResponse, 'default').and.callThrough();
     spyOn(configBuilder, 'buildConfig').and.callFake(moqConfigBuilder.object);
@@ -52,7 +51,7 @@ describe('handler', () => {
       expect(resp.statusCode).toBe(200);
       expect(createResponse.default).toHaveBeenCalledWith(config);
       moqConfigBuilder
-        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE), It.isValue('5.8.0.0')), Times.once());
+        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE)), Times.once());
     });
 
     it('should return 200 when the request was successful for full app version', async () => {
@@ -65,7 +64,7 @@ describe('handler', () => {
       expect(resp.statusCode).toBe(200);
       expect(createResponse.default).toHaveBeenCalledWith(config);
       moqConfigBuilder
-        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE), It.isValue('5.6.3.0')), Times.once());
+        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE)), Times.once());
     });
 
     it('should contain team journal url if app version is 4 or above', async () => {
@@ -75,15 +74,6 @@ describe('handler', () => {
       const resp: any = await handler(dummyApigwEvent);
       const journalData = JSON.parse(resp.body).journal;
       expect('teamJournalUrl' in journalData).toEqual(true);
-    });
-
-    it('should NOT contain team journal url if app version is below 4', async () => {
-      dummyApigwEvent.queryStringParameters = {
-        app_version : '3.1',
-      };
-      const resp: any = await handler(dummyApigwEvent);
-      const journalData = JSON.parse(resp.body).journal;
-      expect('teamJournalUrl' in journalData).toEqual(false);
     });
 
     it('should return 400 when there are no path parameters', async () => {

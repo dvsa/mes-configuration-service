@@ -24,11 +24,6 @@ export const isAppVersionEligibleForTeamJournal = (requestAppVersion: string): b
   return majorVersion >= 4;
 };
 
-// @TODO: Should be safe to now remove now as live app is 4.7.0.x
-export const isAppVersionEligibleForDriverVehicle = (requestAppVersion: string): boolean => {
-  return compareVersions.compare(requestAppVersion, '4.6.2.0', '>');
-};
-
-export const isAppVersionEligibleForRefDataTestCentre = (requestAppVersion: string): boolean => {
-  return compareVersions.compare(requestAppVersion, '4.7.2.0', '>=');
+export const isEligibleFor = (requestAppVersion: string, versionToInclude: string): boolean => {
+  return compareVersions.compare(requestAppVersion, versionToInclude, '>=');
 };

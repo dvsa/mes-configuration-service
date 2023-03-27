@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "author": "DVSA",
   "license": "MIT",
-  "description": "A suite of Lambda functions for retriving configuration for mes",
+  "description": "A suite of Lambda functions for retrieving configuration for mes",
   "homepage": "https://github.com/dvsa/mes-configuration-service#README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dvsa/mes-configuration-service.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dvsa/mes-configuration-service/issues"
   },
   "scripts": {
     "clean": "rimraf build artefacts",
@@ -36,7 +39,6 @@
     "@types/node": "^16.10.2",
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^5.38.1",
-    "@typescript-eslint/eslint-plugin-tslint": "^5.38.1",
     "@typescript-eslint/parser": "^5.38.1",
     "aws-lambda-test-utils": "^1.3.0",
     "eslint": "^8.24.0",
@@ -45,6 +47,7 @@
     "jasmine": "^4.4.0",
     "jasmine-spec-reporter": "^7.0.0",
     "json-schema-to-typescript": "^11.0.2",
+    "lint-staged": "^13.2.0",
     "nyc": "^15.1.0",
     "rimraf": "^3.0.2",
     "serverless": "^3.22.0",
@@ -55,8 +58,6 @@
     "supertest": "^6.2.4",
     "ts-loader": "^9.4.1",
     "ts-node": "^10.9.1",
-    "tslint": "^6.1.3",
-    "tslint-config-airbnb": "^5.11.2",
     "typemoq": "^2.1.0",
     "typescript": "^4.8.4",
     "webpack": "^5.74.0",
@@ -80,7 +81,9 @@
     "produce-source-map": true,
     "instrument": true
   },
-  "bugs": {
-    "url": "https://github.com/dvsa/mes-configuration-service/issues"
+  "lint-staged": {
+    "./src/**/*.ts": [
+      "npm run lint:fix"
+    ]
   }
 }

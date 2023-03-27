@@ -26,42 +26,6 @@ const generateApprovedDeviceIdentifiers = (env: string): string[] => {
     : ['iPad7,4', 'iPad11,4', 'iPad11,7', 'x86_64', 'iPad7,3', 'iPad11,6', 'iPad12,2'];
 };
 
-export const getAllowedTestCategories = (appVersion: string): string[] => {
-  const isDES4: boolean = startsWith(appVersion, '4');
-  info(`Getting categories for DES ${isDES4 ? '4' : '3'} for app version ${appVersion}`);
-
-  if (isDES4) {
-    const des4Cats = mapToCatArray(getDES4LiveCats());
-
-    const isDev: boolean = [Scope.PROD, Scope.PERF, Scope.UAT].every(env => env !== environment());
-
-    if (isDev) {
-      return [
-        ...mapToCatArray(getDES3LiveCats()),
-        ...mapToCatArray(getDES4LiveCats()),
-      ].filter((cat, pos, self) => self.indexOf(cat) === pos);
-    }
-
-    const isUAT: boolean = [Scope.UAT].some(env => env === environment());
-
-    if (isUAT && getDES4UatCats()) {
-      return [...des4Cats, ...mapToCatArray(getDES4UatCats())];
-    }
-
-    const isPilot: boolean = compareVersions.compare(appVersion, getLiveAppVersion() as string, '>');
-
-    if (isPilot && getDES4PilotCats()) {
-      return [...des4Cats, ...mapToCatArray(getDES4PilotCats())];
-    }
-    return des4Cats;
-  }
-  // DES3
-  return mapToCatArray(getDES3LiveCats());
-};
-
-const mapToCatArray = (catString: string | undefined) =>
-  (catString || '').split(',').filter(cat => cat !== '').map(cat => cat);
-
 const generateautoRefreshInterval = (env: string): number => {
   return productionLikeEnvs.includes(env as Scope) ? (300 * 1000) : (20 * 1000);
 };
