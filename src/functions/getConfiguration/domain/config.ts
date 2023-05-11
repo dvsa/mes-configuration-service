@@ -41,7 +41,7 @@ export const config: RemoteConfig = {
     testPermissionPeriods: [],
     enableTestReportPracticeMode: true,
     enableEndToEndPracticeMode: true,
-    enablePracticeModeAnalytics: process.env.enablePracticeModeAnalytics === 'true',
+    enablePracticeModeAnalytics: process.env.ENABLE_PRACTICE_MODE_ANALYTICS === 'true',
     enableLogoutButton: true,
     daysToCacheJournalData: 14,
   },
