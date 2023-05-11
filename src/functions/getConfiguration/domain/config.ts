@@ -1,19 +1,9 @@
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
-import {
-  environment,
-  getDES3LiveCats,
-  getDES4LiveCats,
-  getDES4PilotCats,
-  getDES4UatCats,
-  getLiveAppVersion,
-} from '../framework/environment';
+import { environment } from '../framework/environment';
 import { getBaseApiUrl, getSearchMCBaseApiUrl } from '../framework/getBaseApiUrl';
 import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
 import { ExaminerRole } from '../constants/ExaminerRole';
-import * as compareVersions from 'compare-versions';
-import { startsWith } from 'lodash';
-import { info } from '@dvsa/mes-microservice-common/application/utils/logger';
 
 const productionLikeEnvs = [Scope.PERF, Scope.PROD, Scope.UAT];
 
@@ -51,6 +41,7 @@ export const config: RemoteConfig = {
     testPermissionPeriods: [],
     enableTestReportPracticeMode: true,
     enableEndToEndPracticeMode: true,
+    enablePracticeModeAnalytics: process.env.ENABLE_PRACTICE_MODE_ANALYTICS === 'true',
     enableLogoutButton: true,
     daysToCacheJournalData: 14,
   },
