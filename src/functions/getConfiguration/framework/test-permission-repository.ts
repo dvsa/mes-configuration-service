@@ -1,9 +1,10 @@
 import { TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
-import { DynamoDB } from 'aws-sdk';
+import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import { warn } from '@dvsa/mes-microservice-common/application/utils/logger';
 
 export const getTestPermissionPeriods = async (staffNumber: string): Promise<TestPermissionPeriod[]> => {
-  const ddb = new DynamoDB.DocumentClient();
+  const ddb = DynamoDBDocument.from(new DynamoDB({ region: 'eu-west-1' }));
 
   const getParams = {
     TableName: getUsersTableName(),
@@ -11,8 +12,10 @@ export const getTestPermissionPeriods = async (staffNumber: string): Promise<Tes
       staffNumber,
     },
   };
-  const getResponse = await ddb.get(getParams).promise();
-  const responseItem = getResponse.Item;
+
+  const response = await ddb.get(getParams);
+  const responseItem = response.Item;
+
   if (!responseItem || !responseItem.testPermissionPeriods) {
     return [];
   }
