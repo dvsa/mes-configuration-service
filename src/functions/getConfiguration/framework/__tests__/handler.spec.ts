@@ -71,7 +71,7 @@ describe('handler', () => {
       dummyApigwEvent.queryStringParameters = {
         app_version : '4.0',
       };
-      const resp: any = await handler(dummyApigwEvent);
+      const resp = await handler(dummyApigwEvent);
       const journalData = JSON.parse(resp.body).journal;
       expect('teamJournalUrl' in journalData).toEqual(true);
     });
