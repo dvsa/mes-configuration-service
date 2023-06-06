@@ -10,9 +10,9 @@ import { getMinimumAppVersion } from './environment';
 import * as errorMessages from './errors.constants';
 import {
   formatAppVersion,
-  isAllowedAppVersion,
+  isAllowedAppVersion, isEligibleFor,
 } from './validateAppVersion';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, omit } from 'lodash';
 import { Metric } from '../../../common/application/metric/metric';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
@@ -56,6 +56,15 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   const configClone = cloneDeep(config);
 
   customMetric(Metric.ConfigurationReturned, 'Number of times the configuration has been returned to a user');
+
+  // delete when formattedAppVersion < versionToInclude
+  if (!isEligibleFor(formattedAppVersion, '4.8.0.0')) {
+    const journal = omit(configClone.journal, 'enablePracticeModeAnalytics');
+    return createResponse({
+      ...configClone,
+      journal,
+    });
+  }
 
   return createResponse(configClone);
 }
