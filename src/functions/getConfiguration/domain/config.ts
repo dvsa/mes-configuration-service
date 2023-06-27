@@ -43,7 +43,7 @@ export const config: RemoteConfig = {
     enableEndToEndPracticeMode: true,
     enablePracticeModeAnalytics: process.env.ENABLE_PRACTICE_MODE_ANALYTICS === 'true',
     enableLogoutButton: true,
-    daysToCacheJournalData: (process.env.DAYS_TO_CACHE_JOURNAL_DATA === '17') ? 17 : 14,
+    daysToCacheJournalData: Number(process.env.DAYS_TO_CACHE_JOURNAL_DATA) || 14,
   },
   tests: {
     testSubmissionUrl: `${baseApiUrl}/test-results`,
