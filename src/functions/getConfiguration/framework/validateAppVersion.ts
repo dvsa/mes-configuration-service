@@ -1,4 +1,5 @@
 import * as compareVersions from 'compare-versions';
+import {CompareOperator} from 'compare-versions/src/utils';
 
 export const isAllowedAppVersion = (requestAppVersion: string , minimumAppVersion: string): boolean => {
   if (!isVersionCorrectFormat(requestAppVersion) || !isVersionCorrectFormat(minimumAppVersion)) {
@@ -24,6 +25,10 @@ export const isAppVersionEligibleForTeamJournal = (requestAppVersion: string): b
   return majorVersion >= 4;
 };
 
-export const isEligibleFor = (requestAppVersion: string, versionToInclude: string): boolean => {
-  return compareVersions.compare(requestAppVersion, versionToInclude, '>=');
+export const isEligibleFor = (
+  requestAppVersion: string,
+  operator: CompareOperator,
+  versionToInclude: string,
+): boolean => {
+  return compareVersions.compare(requestAppVersion, versionToInclude, operator);
 };
