@@ -16,7 +16,7 @@ const generateApprovedDeviceIdentifiers = (env: string): string[] => {
     : ['x86_64', 'iPad7,3', 'iPad7,4', 'iPad11,3', 'iPad11,4', 'iPad11,6', 'iPad11,7', 'iPad12,2'];
 };
 
-const generateautoRefreshInterval = (env: string): number => {
+const generateAutoRefreshInterval = (env: string): number => {
   return productionLikeEnvs.includes(env as Scope) ? (300 * 1000) : (20 * 1000);
 };
 
@@ -25,6 +25,7 @@ const baseApiUrl = getBaseApiUrl();
 const searchMcBaseApiUrl = getSearchMCBaseApiUrl();
 
 export const config: RemoteConfig = {
+  liveAppVersion: process.env.LIVE_APP_VERSION,
   googleAnalyticsId: getGAId(),
   role: ExaminerRole.DE,
   approvedDeviceIdentifiers: generateApprovedDeviceIdentifiers(env),
@@ -34,7 +35,7 @@ export const config: RemoteConfig = {
     searchBookingUrl: `${baseApiUrl}/journals/{staffNumber}/search`,
     delegatedExaminerSearchBookingUrl: `${baseApiUrl}/delegated-bookings/{applicationReference}`,
     teamJournalUrl: `${baseApiUrl}/journals/testcentre`,
-    autoRefreshInterval: generateautoRefreshInterval(env),
+    autoRefreshInterval: generateAutoRefreshInterval(env),
     numberOfDaysToView: 14,
     allowTests: true,
     allowedTestCategories: generateAllowedTestCategories(env),

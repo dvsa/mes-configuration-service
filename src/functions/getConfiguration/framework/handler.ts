@@ -57,12 +57,11 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
 
   customMetric(Metric.ConfigurationReturned, 'Number of times the configuration has been returned to a user');
 
-  // delete when formattedAppVersion < versionToInclude
-  if (!isEligibleFor(formattedAppVersion, '4.8.0.0')) {
-    const journal = omit(configClone.journal, 'enablePracticeModeAnalytics');
+  // delete when formattedAppVersion <= versionToInclude
+  if (isEligibleFor(formattedAppVersion, '<=', '4.8.0.5')) {
+    const conf = omit(configClone, 'liveAppVersion');
     return createResponse({
-      ...configClone,
-      journal,
+      ...conf,
     });
   }
 
