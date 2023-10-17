@@ -1,19 +1,26 @@
 import { APIGatewayEventRequestContext, APIGatewayProxyEvent } from 'aws-lambda';
-import { bootstrapLogging, customMetric, error, info } from '@dvsa/mes-microservice-common/application/utils/logger';
+import {
+  bootstrapLogging,
+  customMetric,
+  debug,
+  error,
+  info,
+} from '@dvsa/mes-microservice-common/application/utils/logger';
+import { cloneDeep } from 'lodash';
+import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import createResponse from '../../../common/application/utils/createResponse';
 import Response from '../../../common/application/api/Response';
 import { Scope } from '../domain/scopes.constants';
-import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../domain/config-builder';
 import { ExaminerRole } from '../constants/ExaminerRole';
 import { getMinimumAppVersion } from './environment';
 import * as errorMessages from './errors.constants';
 import {
   formatAppVersion,
-  isAllowedAppVersion, isEligibleFor,
+  isAllowedAppVersion,
 } from './validateAppVersion';
-import { cloneDeep, omit } from 'lodash';
 import { Metric } from '../../../common/application/metric/metric';
+import {HttpStatus} from '../../../common/application/api/HttpStatus';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
@@ -21,49 +28,46 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   const minimumAppVersion = getMinimumAppVersion();
   if (minimumAppVersion === undefined || minimumAppVersion.trim().length === 0) {
     error(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE);
-    return createResponse(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
+    return createResponse(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   if (!event.pathParameters || !event.pathParameters.scope) {
     error(errorMessages.NO_SCOPE);
-    return createResponse(errorMessages.NO_SCOPE, 400);
+    return createResponse(errorMessages.NO_SCOPE, HttpStatus.BAD_REQUEST);
   }
 
   if (!event.queryStringParameters || !event.queryStringParameters.app_version) {
     error(errorMessages.NO_APP_VERSION);
-    return createResponse(errorMessages.NO_APP_VERSION, 400);
+    return createResponse(errorMessages.NO_APP_VERSION, HttpStatus.BAD_REQUEST);
   }
 
   const formattedAppVersion: string = formatAppVersion(event.queryStringParameters.app_version);
 
   if (!isAllowedAppVersion(formattedAppVersion, minimumAppVersion)) {
     error(errorMessages.APP_VERSION_BELOW_MINIMUM);
-    return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
+    return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, HttpStatus.UNAUTHORIZED);
   }
 
   const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
+
   if (!staffNumber) {
     error(errorMessages.NO_STAFF_NUMBER);
-    return createResponse(errorMessages.NO_STAFF_NUMBER, 401);
+    return createResponse(errorMessages.NO_STAFF_NUMBER, HttpStatus.UNAUTHORIZED);
   }
 
   const examinerRole = getExaminerRoleFromRequestContext(event.requestContext);
 
   const scope: Scope = event.pathParameters.scope as Scope;
+
   info('Returning configuration for ', scope);
 
   const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
+
   const configClone = cloneDeep(config);
 
   customMetric(Metric.ConfigurationReturned, 'Number of times the configuration has been returned to a user');
 
-  // delete when formattedAppVersion <= versionToInclude
-  if (isEligibleFor(formattedAppVersion, '<=', '4.8.0.5')) {
-    const conf = omit(configClone, 'liveAppVersion');
-    return createResponse({
-      ...conf,
-    });
-  }
+  debug('Config clone', configClone);
 
   return createResponse(configClone);
 }
