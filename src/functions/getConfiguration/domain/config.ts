@@ -25,6 +25,7 @@ const baseApiUrl = getBaseApiUrl();
 const searchMcBaseApiUrl = getSearchMCBaseApiUrl();
 
 export const config: RemoteConfig = {
+  allowSingleAppMode: process.env.ALLOW_ASAM === 'true',
   liveAppVersion: process.env.LIVE_APP_VERSION,
   googleAnalyticsId: getGAId(),
   role: ExaminerRole.DE,
