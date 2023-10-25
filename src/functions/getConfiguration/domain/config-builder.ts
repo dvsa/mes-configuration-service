@@ -1,8 +1,8 @@
 import { RemoteConfig, TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
-import { ExaminerRole } from '@dvsa/mes-microservice-common/domain/examiner-role';
-import { warn } from '@dvsa/mes-microservice-common/application/utils/logger';
 import { config } from './config';
 import { getTestPermissionPeriods } from '../framework/aws/test-permission-repository';
+import { warn } from '@dvsa/mes-microservice-common/application/utils/logger';
+import { ExaminerRole } from '../constants/ExaminerRole';
 
 export const buildConfig = async (
   staffNumber: string,
