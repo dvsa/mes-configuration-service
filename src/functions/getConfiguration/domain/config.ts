@@ -1,6 +1,6 @@
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
-import { environment } from '../framework/environment';
-import { getBaseApiUrl, getSearchMCBaseApiUrl } from '../framework/getBaseApiUrl';
+import { environment } from './environment';
+import { getBaseApiUrl, getSearchMCBaseApiUrl } from './getBaseApiUrl';
 import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
 import { ExaminerRole } from '../constants/ExaminerRole';
