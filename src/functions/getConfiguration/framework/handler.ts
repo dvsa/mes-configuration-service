@@ -1,19 +1,20 @@
-import { APIGatewayEventRequestContext, APIGatewayProxyEvent } from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { bootstrapLogging, customMetric, error, info } from '@dvsa/mes-microservice-common/application/utils/logger';
 import createResponse from '../../../common/application/utils/createResponse';
 import Response from '../../../common/application/api/Response';
 import { Scope } from '../domain/scopes.constants';
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../domain/config-builder';
-import { ExaminerRole } from '../constants/ExaminerRole';
-import { getMinimumAppVersion } from './environment';
-import * as errorMessages from './errors.constants';
+import { getMinimumAppVersion } from '../domain/environment';
+import * as errorMessages from '../constants/errors.constants';
 import {
   formatAppVersion,
   isAllowedAppVersion, isEligibleFor,
-} from './validateAppVersion';
+} from '../application/validateAppVersion';
 import { cloneDeep, omit } from 'lodash';
 import { Metric } from '../../../common/application/metric/metric';
+import {getStaffNumberFromRequestContext} from '@dvsa/mes-microservice-common/framework/security/authorisation';
+import {getExaminerRoleFromRequestContext} from '../application/request-validator';
 
 export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
   bootstrapLogging('configuration-service', event);
@@ -67,26 +68,3 @@ export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
 
   return createResponse(configClone);
 }
-
-const getStaffNumberFromRequestContext = (requestContext: APIGatewayEventRequestContext): string | null => {
-  if (requestContext.authorizer && typeof requestContext.authorizer.staffNumber === 'string') {
-    return requestContext.authorizer.staffNumber;
-  }
-  return null;
-};
-
-const getExaminerRoleFromRequestContext = (requestContext: APIGatewayEventRequestContext): ExaminerRole => {
-  if (requestContext.authorizer) {
-    const { examinerRole } = requestContext.authorizer;
-
-    switch (examinerRole) {
-    case 'DLG': return ExaminerRole.DLG;
-    case 'LDTM': return ExaminerRole.LDTM;
-    default: return ExaminerRole.DE;
-    }
-  }
-  // If role is missing we default to DE
-  // We only use this for search settings not for authentication so there is no risk giving the user
-  // the lowest role type.
-  return ExaminerRole.DE;
-};

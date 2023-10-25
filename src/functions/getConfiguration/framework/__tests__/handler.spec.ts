@@ -5,7 +5,7 @@ import { config } from '../../domain/config';
 import { Mock, Times, It } from 'typemoq';
 import * as configBuilder from '../../domain/config-builder';
 import { ExaminerRole } from '../../constants/ExaminerRole';
-import * as errorMessages from '../errors.constants';
+import * as errorMessages from '../../constants/errors.constants';
 
 const lambdaTestUtils = require('aws-lambda-test-utils');
 

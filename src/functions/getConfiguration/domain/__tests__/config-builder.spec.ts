@@ -1,5 +1,5 @@
 import { Mock, It, Times } from 'typemoq';
-import * as testPermissionRepo from '../../framework/test-permission-repository';
+import * as testPermissionRepo from '../../framework/aws/test-permission-repository';
 import { TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../config-builder';
 import { ExaminerRole } from '../../constants/ExaminerRole';
