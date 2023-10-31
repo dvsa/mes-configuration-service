@@ -1,9 +1,9 @@
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
+import { ExaminerRole } from '@dvsa/mes-microservice-common/domain/examiner-role';
 import { environment } from './environment';
 import { getBaseApiUrl, getSearchMCBaseApiUrl } from './getBaseApiUrl';
 import { Scope } from './scopes.constants';
 import { getGAId } from './getGAId';
-import { ExaminerRole } from '../constants/ExaminerRole';
 
 const productionLikeEnvs = [Scope.PERF, Scope.PROD, Scope.UAT];
 
