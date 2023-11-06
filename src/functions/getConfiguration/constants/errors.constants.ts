@@ -1,5 +1,5 @@
 export const MISSING_APP_VERSION_ENV_VARIBLE =
-    'Unable to retrive the minimum app version from the environment';
+    'Unable to retrieve the minimum app version from the environment';
 
 export const NO_SCOPE =
     'No scope provided';
