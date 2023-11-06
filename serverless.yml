@@ -3,6 +3,13 @@ service: mes-configuration-service
 provider:
   name: aws
   runtime: nodejs18.x
+  environment:
+    USERS_DDB_TABLE_NAME: users
+    DDB_OFFLINE_ENDPOINT: http://localhost:8000
+    AWS_ACCESS_KEY_ID: accessKeyId
+    AWS_SECRET_ACCESS_KEY: secretAccessKey
+    MINIMUM_APP_VERSION: 5.0.0.0
+    STAFF_NUMBER: 1234567
 
 package:
   individually: true
@@ -16,10 +23,41 @@ functions:
           method: get
 
 custom:
+  dynamodb:
+    stages:
+      - test
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+    seed:
+      test:
+        sources:
+          - table: users
+            sources: [ ./test-data/dynamo-seed-users.json ]
   webpack:
     webpackConfig: 'webpack-sls-offline.config.js'
 
+resources:
+  Resources:
+    users:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_DDB_TABLE_NAME}
+        AttributeDefinitions:
+          - AttributeName: staffNumber
+            AttributeType: S
+        KeySchema:
+          - AttributeName: staffNumber
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+
 plugins:
   - serverless-dotenv-plugin
-  - serverless-offline
   - serverless-webpack
+  - serverless-dynamodb
+  - serverless-offline

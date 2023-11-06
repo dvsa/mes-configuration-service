@@ -1,6 +1,6 @@
 import { TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
 import { DynamoDBClient, DynamoDBClientConfig} from '@aws-sdk/client-dynamodb';
-import { fromIni } from '@aws-sdk/credential-providers';
+import { fromEnv, fromIni } from '@aws-sdk/credential-providers';
 import { GetCommand } from '@aws-sdk/lib-dynamodb';
 import { warn } from '@dvsa/mes-microservice-common/application/utils/logger';
 
@@ -21,16 +21,17 @@ const createDynamoClient = () => {
     opts.credentials = fromIni();
   } else if (process.env.IS_OFFLINE === 'true') {
     warn('Using SLS offline');
+    opts.credentials = fromEnv();
     opts.endpoint = process.env.DDB_OFFLINE_ENDPOINT;
   }
 
   return new DynamoDBClient(opts);
 };
 
-const ddb = createDynamoClient();
-const tableName = getUsersTableName();
-
 export const getTestPermissionPeriods = async (staffNumber: string): Promise<TestPermissionPeriod[]> => {
+  const ddb = createDynamoClient();
+  const tableName = getUsersTableName();
+
   const response = await ddb.send(
     new GetCommand({
       TableName: tableName,

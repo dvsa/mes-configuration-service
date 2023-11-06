@@ -22,9 +22,10 @@ import {ExaminerRole} from '@dvsa/mes-microservice-common/domain/examiner-role';
 import {createResponse} from '@dvsa/mes-microservice-common/application/api/create-response';
 import {HttpStatus} from '@dvsa/mes-microservice-common/application/api/http-status';
 import {getPathParam} from '@dvsa/mes-microservice-common/framework/validation/event-validation';
+import {buildRequestContext} from '../application/build_request-context';
 
 export async function handler(event: APIGatewayProxyEvent) {
-  bootstrapLogging('configuration-service', event);
+  bootstrapLogging('get-configuration', event);
 
   const minimumAppVersion = getMinimumAppVersion();
   debug('Minimum app version', minimumAppVersion);
@@ -55,7 +56,7 @@ export async function handler(event: APIGatewayProxyEvent) {
     return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, HttpStatus.UNAUTHORIZED);
   }
 
-  const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
+  const staffNumber = getStaffNumberFromRequestContext(buildRequestContext(event.requestContext));
   if (!staffNumber) {
     error(errorMessages.NO_STAFF_NUMBER);
     return createResponse(errorMessages.NO_STAFF_NUMBER, HttpStatus.UNAUTHORIZED);
@@ -65,7 +66,7 @@ export async function handler(event: APIGatewayProxyEvent) {
 
   debug('Examiner role', examinerRole);
 
-  const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
+  const config: RemoteConfig = await buildConfig(staffNumber as string, examinerRole);
 
   const configClone = cloneDeep(config);
 
