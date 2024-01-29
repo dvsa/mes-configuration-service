@@ -1,4 +1,4 @@
-import {APIGatewayProxyEvent} from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import {
   bootstrapLogging,
   customMetric,
@@ -6,22 +6,22 @@ import {
   error,
   info,
 } from '@dvsa/mes-microservice-common/application/utils/logger';
-import {Scope} from '../domain/scopes.constants';
-import {RemoteConfig} from '@dvsa/mes-config-schema/remote-config';
-import {buildConfig} from '../domain/config-builder';
-import {getMinimumAppVersion} from '../domain/environment';
+import { Scope } from '../domain/scopes.constants';
+import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
+import { buildConfig } from '../domain/config-builder';
+import { getMinimumAppVersion } from '../domain/environment';
 import * as errorMessages from '../constants/errors.constants';
-import {formatAppVersion, isAllowedAppVersion} from '../application/validateAppVersion';
-import {cloneDeep} from 'lodash';
-import {Metric} from '../../../common/application/metric/metric';
+import { formatAppVersion, isAllowedAppVersion } from '../application/validateAppVersion';
+import { cloneDeep } from 'lodash';
+import { Metric } from '../../../common/application/metric/metric';
 import {
   getRoleFromRequestContext,
   getStaffNumberFromRequestContext,
 } from '@dvsa/mes-microservice-common/framework/security/authorisation';
-import {ExaminerRole} from '@dvsa/mes-microservice-common/domain/examiner-role';
-import {createResponse} from '@dvsa/mes-microservice-common/application/api/create-response';
-import {HttpStatus} from '@dvsa/mes-microservice-common/application/api/http-status';
-import {getPathParam} from '@dvsa/mes-microservice-common/framework/validation/event-validation';
+import { ExaminerRole } from '@dvsa/mes-microservice-common/domain/examiner-role';
+import { createResponse } from '@dvsa/mes-microservice-common/application/api/create-response';
+import { HttpStatus } from '@dvsa/mes-microservice-common/application/api/http-status';
+import { getPathParam } from '@dvsa/mes-microservice-common/framework/validation/event-validation';
 
 export async function handler(event: APIGatewayProxyEvent) {
   bootstrapLogging('configuration-service', event);
