@@ -1,70 +1,75 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
-import { bootstrapLogging, customMetric, error, info } from '@dvsa/mes-microservice-common/application/utils/logger';
-import createResponse from '../../../common/application/utils/createResponse';
-import Response from '../../../common/application/api/Response';
+import {
+  bootstrapLogging,
+  customMetric,
+  debug,
+  error,
+  info,
+} from '@dvsa/mes-microservice-common/application/utils/logger';
 import { Scope } from '../domain/scopes.constants';
 import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../domain/config-builder';
 import { getMinimumAppVersion } from '../domain/environment';
 import * as errorMessages from '../constants/errors.constants';
-import {
-  formatAppVersion,
-  isAllowedAppVersion, isEligibleFor,
-} from '../application/validateAppVersion';
-import { cloneDeep, omit } from 'lodash';
+import { formatAppVersion, isAllowedAppVersion } from '../application/validateAppVersion';
+import { cloneDeep } from 'lodash';
 import { Metric } from '../../../common/application/metric/metric';
-import {getStaffNumberFromRequestContext} from '@dvsa/mes-microservice-common/framework/security/authorisation';
-import {getExaminerRoleFromRequestContext} from '../application/request-validator';
+import {
+  getRoleFromRequestContext,
+  getStaffNumberFromRequestContext,
+} from '@dvsa/mes-microservice-common/framework/security/authorisation';
+import { ExaminerRole } from '@dvsa/mes-microservice-common/domain/examiner-role';
+import { createResponse } from '@dvsa/mes-microservice-common/application/api/create-response';
+import { HttpStatus } from '@dvsa/mes-microservice-common/application/api/http-status';
+import { getPathParam } from '@dvsa/mes-microservice-common/framework/validation/event-validation';
 
-export async function handler(event: APIGatewayProxyEvent): Promise<Response> {
+export async function handler(event: APIGatewayProxyEvent) {
   bootstrapLogging('configuration-service', event);
 
   const minimumAppVersion = getMinimumAppVersion();
+  debug('Minimum app version', minimumAppVersion);
+
   if (minimumAppVersion === undefined || minimumAppVersion.trim().length === 0) {
     error(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE);
-    return createResponse(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, 500);
+    return createResponse(errorMessages.MISSING_APP_VERSION_ENV_VARIBLE, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
-  if (!event.pathParameters || !event.pathParameters.scope) {
+  const scope = getPathParam(event.pathParameters, 'scope') as Scope;
+  if (!scope) {
     error(errorMessages.NO_SCOPE);
-    return createResponse(errorMessages.NO_SCOPE, 400);
+    return createResponse(errorMessages.NO_SCOPE, HttpStatus.BAD_REQUEST);
   }
 
-  if (!event.queryStringParameters || !event.queryStringParameters.app_version) {
+  info('Returning configuration for', scope);
+
+  if (!event.queryStringParameters || !event.queryStringParameters?.app_version) {
     error(errorMessages.NO_APP_VERSION);
-    return createResponse(errorMessages.NO_APP_VERSION, 400);
+    return createResponse(errorMessages.NO_APP_VERSION, HttpStatus.BAD_REQUEST);
   }
 
   const formattedAppVersion: string = formatAppVersion(event.queryStringParameters.app_version);
+  debug('Formatted app version', formattedAppVersion);
 
   if (!isAllowedAppVersion(formattedAppVersion, minimumAppVersion)) {
     error(errorMessages.APP_VERSION_BELOW_MINIMUM);
-    return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, 401);
+    return createResponse(errorMessages.APP_VERSION_BELOW_MINIMUM, HttpStatus.UNAUTHORIZED);
   }
 
   const staffNumber = getStaffNumberFromRequestContext(event.requestContext);
   if (!staffNumber) {
     error(errorMessages.NO_STAFF_NUMBER);
-    return createResponse(errorMessages.NO_STAFF_NUMBER, 401);
+    return createResponse(errorMessages.NO_STAFF_NUMBER, HttpStatus.UNAUTHORIZED);
   }
 
-  const examinerRole = getExaminerRoleFromRequestContext(event.requestContext);
+  const examinerRole = getRoleFromRequestContext(event.requestContext) || ExaminerRole.DE;
 
-  const scope: Scope = event.pathParameters.scope as Scope;
-  info('Returning configuration for ', scope);
+  debug('Examiner role', examinerRole);
 
   const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
+
   const configClone = cloneDeep(config);
 
   customMetric(Metric.ConfigurationReturned, 'Number of times the configuration has been returned to a user');
-
-  // delete when formattedAppVersion <= versionToInclude
-  if (isEligibleFor(formattedAppVersion, '<=', '4.8.0.5')) {
-    const conf = omit(configClone, 'liveAppVersion');
-    return createResponse({
-      ...conf,
-    });
-  }
 
   return createResponse(configClone);
 }

@@ -2,7 +2,7 @@ import { Mock, It, Times } from 'typemoq';
 import * as testPermissionRepo from '../../framework/aws/test-permission-repository';
 import { TestPermissionPeriod } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../config-builder';
-import { ExaminerRole } from '../../constants/ExaminerRole';
+import { ExaminerRole } from '@dvsa/mes-microservice-common/domain/examiner-role';
 
 describe('ConfigBuilder', () => {
   const moqTestPermissionRepo = Mock.ofInstance(testPermissionRepo.getTestPermissionPeriods);
