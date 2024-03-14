@@ -2,7 +2,7 @@ import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { environment } from './environment';
 import { getBaseApiUrl, getSearchMCBaseApiUrl } from './getBaseApiUrl';
 import { Scope } from './scopes.constants';
-import { getGAId } from './getGAId';
+import { getGAId, getGAKey } from './getGAId';
 import { ExaminerRole } from '@dvsa/mes-microservice-common/domain/examiner-role';
 
 const productionLikeEnvs = [Scope.PERF, Scope.PROD, Scope.UAT];
@@ -27,6 +27,7 @@ const searchMcBaseApiUrl = getSearchMCBaseApiUrl();
 export const config: RemoteConfig = {
   liveAppVersion: process.env.LIVE_APP_VERSION,
   googleAnalyticsId: getGAId(),
+  googleAnalyticsKey: getGAKey(),
   role: ExaminerRole.DE,
   approvedDeviceIdentifiers: generateApprovedDeviceIdentifiers(env),
   employeeNameKey: 'name',
