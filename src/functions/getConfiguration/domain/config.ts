@@ -64,7 +64,7 @@ export const config: RemoteConfig = {
     taxMotUrl: `${searchMcBaseApiUrl}`,
   },
   mot: {
-    motHistoryUrl: `${baseApiUrl}/mot-history/{vehicleRegNumber}`,
+    motHistoryUrl: `${baseApiUrl}/mot-history/{vrn}`,
   },
   refData: {
     testCentreUrl: `${baseApiUrl}/refdata/testcentres`,
