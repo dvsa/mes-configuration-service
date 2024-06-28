@@ -49,6 +49,7 @@ export const config: RemoteConfig = {
   },
   tests: {
     testSubmissionUrl: `${baseApiUrl}/test-results`,
+    multipleTestResultsUrl: `${baseApiUrl}/test-results/multiple-results`,
     examinerRecordsUrl: `${baseApiUrl}/test-results/search-examiner-records`,
     autoSendInterval: 120000,
   },
