@@ -25,6 +25,12 @@ export const isAppVersionEligibleForTeamJournal = (requestAppVersion: string): b
   return majorVersion >= 4;
 };
 
+/**
+ * Allow config to be introduced for specific versions of the app
+ * @param requestAppVersion
+ * @param operator
+ * @param versionToInclude
+ */
 export const isEligibleFor = (
   requestAppVersion: string,
   operator: CompareOperator,
