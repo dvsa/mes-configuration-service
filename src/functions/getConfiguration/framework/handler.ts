@@ -11,7 +11,7 @@ import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
 import { buildConfig } from '../domain/config-builder';
 import { getMinimumAppVersion } from '../domain/environment';
 import * as errorMessages from '../constants/errors.constants';
-import { formatAppVersion, isAllowedAppVersion } from '../application/validateAppVersion';
+import { formatAppVersion, isAllowedAppVersion, isEligibleFor } from '../application/validateAppVersion';
 import { cloneDeep } from 'lodash';
 import { Metric } from '../../../common/application/metric/metric';
 import {
@@ -68,6 +68,11 @@ export async function handler(event: APIGatewayProxyEvent) {
   const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
 
   const configClone = cloneDeep(config);
+
+  if (isEligibleFor(formattedAppVersion, '<', '4.12.2.0')) {
+    const {multipleTestResultsUrl, ...tests} = config.tests;
+    configClone.tests = tests;
+  }
 
   customMetric(Metric.ConfigurationReturned, 'Number of times the configuration has been returned to a user');
 
