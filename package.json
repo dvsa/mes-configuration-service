@@ -28,14 +28,14 @@
     "sonar-scanner": "node_modules/sonar-scanner/bin/sonar-scanner"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.621.0",
-    "@aws-sdk/lib-dynamodb": "^3.621.0",
+    "@aws-sdk/client-dynamodb": "^3.624.0",
+    "@aws-sdk/lib-dynamodb": "^3.624.0",
     "@dvsa/mes-microservice-common": "1.1.6",
     "compare-versions": "^6.1.1",
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@aws-sdk/credential-providers": "^3.621.0",
+    "@aws-sdk/credential-providers": "^3.624.0",
     "@dvsa/mes-config-schema": "1.9.0",
     "@types/aws-lambda": "^8.10.142",
     "@types/jasmine": "^5.1.4",
