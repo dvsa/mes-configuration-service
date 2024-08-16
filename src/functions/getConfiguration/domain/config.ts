@@ -28,6 +28,7 @@ const searchMcBaseApiUrl = getSearchMCBaseApiUrl();
 
 export const config: RemoteConfig = {
   liveAppVersion: process.env.LIVE_APP_VERSION,
+  googleAnalyticsId: getGAId(),
   googleAnalyticsKey: getGAKey(),
   role: ExaminerRole.DE,
   approvedDeviceIdentifiers: generateApprovedDeviceIdentifiers(env),

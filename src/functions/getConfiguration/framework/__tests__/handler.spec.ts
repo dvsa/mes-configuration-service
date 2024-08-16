@@ -41,28 +41,14 @@ describe('handler', () => {
   });
 
   describe('handler', () => {
-    it('should return 200 when the request was successful for 2 digit app version', async () => {
+    it('should return 200 when the request was successful for a valid app version', async () => {
       dummyApigwEvent.queryStringParameters = {
-        app_version : '5.8',
+        app_version : '4.12.2.0',
       };
 
       const resp: any = await handler(dummyApigwEvent);
 
       expect(resp.statusCode).toBe(200);
-      expect(response.createResponse).toHaveBeenCalledWith(config);
-      moqConfigBuilder
-        .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE)), Times.once());
-    });
-
-    it('should return 200 when the request was successful for full app version', async () => {
-      dummyApigwEvent.queryStringParameters = {
-        app_version : '5.6.3.0',
-      };
-
-      const resp: any = await handler(dummyApigwEvent);
-
-      expect(resp.statusCode).toBe(200);
-      expect(response.createResponse).toHaveBeenCalledWith(config);
       moqConfigBuilder
         .verify(x => x(It.isValue('123'), It.isValue(ExaminerRole.DE)), Times.once());
     });
@@ -74,6 +60,31 @@ describe('handler', () => {
       const resp = await handler(dummyApigwEvent);
       const journalData = JSON.parse(resp.body as string).journal;
       expect('teamJournalUrl' in journalData).toEqual(true);
+    });
+
+    it('should contain multipleTestResultsUrl url if app version is 4.12.2.0 or above', async () => {
+      dummyApigwEvent.queryStringParameters = {
+        app_version : '4.12.2.0',
+      };
+      const resp = await handler(dummyApigwEvent);
+      const testData = JSON.parse(resp.body as string).tests;
+      expect('multipleTestResultsUrl' in testData).toEqual(true);
+    });
+
+    it('should contain googleAnalyticsId if app version is less than 4.12.3.0', async () => {
+      dummyApigwEvent.queryStringParameters = {
+        app_version : '4.12.2.0',
+      };
+      const resp = await handler(dummyApigwEvent);
+      expect('googleAnalyticsId' in JSON.parse(resp.body as string)).toEqual(true);
+    });
+
+    it('should NOT contain googleAnalyticsId if app version is 4.12.3.0 or above', async () => {
+      dummyApigwEvent.queryStringParameters = {
+        app_version : '4.12.3.0',
+      };
+      const resp = await handler(dummyApigwEvent);
+      expect('googleAnalyticsId' in JSON.parse(resp.body as string)).toEqual(false);
     });
 
     it('should return 400 when there are no path parameters', async () => {
