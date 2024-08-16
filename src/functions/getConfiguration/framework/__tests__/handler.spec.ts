@@ -71,12 +71,20 @@ describe('handler', () => {
       expect('multipleTestResultsUrl' in testData).toEqual(true);
     });
 
+    it('should contain googleAnalyticsId if app version is less than 4.12.3.0', async () => {
+      dummyApigwEvent.queryStringParameters = {
+        app_version : '4.12.2.0',
+      };
+      const resp = await handler(dummyApigwEvent);
+      expect('googleAnalyticsId' in JSON.parse(resp.body as string)).toEqual(true);
+    });
+
     it('should NOT contain googleAnalyticsId if app version is 4.12.3.0 or above', async () => {
       dummyApigwEvent.queryStringParameters = {
         app_version : '4.12.3.0',
       };
       const resp = await handler(dummyApigwEvent);
-      expect('googleAnalyticsId' in resp).toEqual(false);
+      expect('googleAnalyticsId' in JSON.parse(resp.body as string)).toEqual(false);
     });
 
     it('should return 400 when there are no path parameters', async () => {
