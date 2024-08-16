@@ -67,11 +67,17 @@ export async function handler(event: APIGatewayProxyEvent) {
 
   const config: RemoteConfig = await buildConfig(staffNumber, examinerRole);
 
-  const configClone = cloneDeep(config);
+  let configClone = cloneDeep(config);
 
+  // TODO: MES-9914: Review and remove this when this code is next touched
   if (isEligibleFor(formattedAppVersion, '<', '4.12.2.0')) {
     const {multipleTestResultsUrl, ...tests} = config.tests;
     configClone.tests = tests;
+  }
+
+  if (isEligibleFor(formattedAppVersion, '>=', '4.12.3.0')) {
+    const { googleAnalyticsId, ...eligibleConfig } = configClone;
+    configClone = eligibleConfig;
   }
 
   customMetric(Metric.ConfigurationReturned, 'Number of times the configuration has been returned to a user');
