@@ -80,6 +80,12 @@ export async function handler(event: APIGatewayProxyEvent) {
     configClone = eligibleConfig;
   }
 
+  // TODO: MES-9914: Review and remove this when this code is next touched
+  if (isEligibleFor(formattedAppVersion, '<', '4.18.0.0')) {
+    const {usefulLinks, ...eligibleConfig} = configClone;
+    configClone = eligibleConfig;
+  }
+
   customMetric(Metric.ConfigurationReturned, 'Number of times the configuration has been returned to a user');
 
   return createResponse(configClone);
