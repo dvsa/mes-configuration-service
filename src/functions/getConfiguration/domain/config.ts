@@ -75,18 +75,18 @@ export const config: RemoteConfig = {
   usefulLinks: [
     {
       // eslint-disable-next-line max-len
-      url: 'https://www.gov.uk/guidance/guidance-for-driving-examiners-carrying-out-driving-tests-dt1',
-      displayText: 'DT1 guidance',
-    },
-    {
-      // eslint-disable-next-line max-len
       url: 'https://dvsauk.sharepoint.com/:w:/s/Resumingdriverservices/ER7n13IeH09AqaZINxzrfnYBGNC2Sf5hiNeLp5-Gt-CKiw?e=eB6rMx',
       displayText: 'Accessibility statement',
     },
     {
       // eslint-disable-next-line max-len
+      url: 'https://www.gov.uk/guidance/guidance-for-driving-examiners-carrying-out-driving-tests-dt1',
+      displayText: 'DT1 guidance',
+    },
+    {
+      // eslint-disable-next-line max-len
       url: 'https://dvsauk.sharepoint.com/sites/ChiefDrivingExaminerandTechnicalStandardsHub?e=1%3A1d13247f10634a75bd08a5975620a28d',
-      displayText: 'Chief Driving Examiner and Technical Standards Hub',
+      displayText: 'Technical standards hub',
     },
   ],
   requestTimeout: 40000,
