@@ -88,6 +88,11 @@ export const config: RemoteConfig = {
       url: 'https://dvsauk.sharepoint.com/sites/ChiefDrivingExaminerandTechnicalStandardsHub?e=1%3A1d13247f10634a75bd08a5975620a28d',
       displayText: 'Technical standards hub',
     },
+    {
+      // eslint-disable-next-line max-len
+      url: 'https://www.citroen.co.uk/maintain/safety-recall-check.html',
+      displayText: 'Citroen vehicle recall information',
+    },
   ],
   requestTimeout: 40000,
 };
