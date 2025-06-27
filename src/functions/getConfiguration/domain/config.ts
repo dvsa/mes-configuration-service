@@ -91,7 +91,7 @@ export const config: RemoteConfig = {
     {
       // eslint-disable-next-line max-len
       url: 'https://www.citroen.co.uk/maintain/safety-recall-check.html',
-      displayText: 'Citroen vehicle recall information',
+      displayText: 'Citroën vehicle recall VIN checker',
     },
   ],
   requestTimeout: 40000,
