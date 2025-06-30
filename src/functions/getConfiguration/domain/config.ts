@@ -26,6 +26,9 @@ const env = environment();
 const baseApiUrl = getBaseApiUrl();
 const searchMcBaseApiUrl = getSearchMCBaseApiUrl();
 
+const sortUsefulLinks = (links: { url: string; displayText: string }[]) =>
+  links.slice().sort((a, b) => a.displayText.localeCompare(b.displayText));
+
 export const config: RemoteConfig = {
   liveAppVersion: process.env.LIVE_APP_VERSION,
   googleAnalyticsId: getGAId(),
@@ -72,7 +75,7 @@ export const config: RemoteConfig = {
   refData: {
     testCentreUrl: `${baseApiUrl}/refdata/testcentres`,
   },
-  usefulLinks: [
+  usefulLinks: sortUsefulLinks([
     {
       // eslint-disable-next-line max-len
       url: 'https://dvsauk.sharepoint.com/:w:/s/Resumingdriverservices/ER7n13IeH09AqaZINxzrfnYBGNC2Sf5hiNeLp5-Gt-CKiw?e=eB6rMx',
@@ -93,6 +96,6 @@ export const config: RemoteConfig = {
       url: 'https://www.citroen.co.uk/maintain/safety-recall-check.html',
       displayText: 'Citroën vehicle recall VIN checker',
     },
-  ],
+  ]),
   requestTimeout: 40000,
 };
