@@ -1,4 +1,4 @@
-import { RemoteConfig } from '@dvsa/mes-config-schema/remote-config';
+import { RemoteConfig, UsefulLink } from '@dvsa/mes-config-schema/remote-config';
 import { environment } from './environment';
 import { getBaseApiUrl, getSearchMCBaseApiUrl } from './getBaseApiUrl';
 import { Scope } from './scopes.constants';
@@ -26,7 +26,7 @@ const env = environment();
 const baseApiUrl = getBaseApiUrl();
 const searchMcBaseApiUrl = getSearchMCBaseApiUrl();
 
-const sortUsefulLinks = (links: { url: string; displayText: string }[]) =>
+const sortUsefulLinks = (links: UsefulLink[]) =>
   links.slice().sort((a, b) => a.displayText.localeCompare(b.displayText));
 
 export const config: RemoteConfig = {
@@ -77,22 +77,24 @@ export const config: RemoteConfig = {
   },
   usefulLinks: sortUsefulLinks([
     {
+      id: 'accessibility-statement',
       // eslint-disable-next-line max-len
       url: 'https://dvsauk.sharepoint.com/:w:/s/Resumingdriverservices/ER7n13IeH09AqaZINxzrfnYBGNC2Sf5hiNeLp5-Gt-CKiw?e=eB6rMx',
       displayText: 'Accessibility statement',
     },
     {
-      // eslint-disable-next-line max-len
+      id: 'dt1',
       url: 'https://www.gov.uk/guidance/guidance-for-driving-examiners-carrying-out-driving-tests-dt1',
       displayText: 'DT1 guidance',
     },
     {
+      id: 'technical-standards',
       // eslint-disable-next-line max-len
       url: 'https://dvsauk.sharepoint.com/sites/ChiefDrivingExaminerandTechnicalStandardsHub?e=1%3A1d13247f10634a75bd08a5975620a28d',
       displayText: 'Technical standards hub',
     },
     {
-      // eslint-disable-next-line max-len
+      id: 'citroen-recall',
       url: 'https://www.citroen.co.uk/maintain/safety-recall-check.html',
       displayText: 'Citroën vehicle recall VIN checker',
     },
